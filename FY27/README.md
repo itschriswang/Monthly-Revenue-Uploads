@@ -24,12 +24,13 @@ One month deep so far: **Jul 2026**.
 | `Account_Setup_and_Data_Load` | The load itself — 67 rows, values only. This is what goes to Envizi. |
 | `Prep - with formulas` | The same 67 rows with the formulas that build them, so the load can be rederived. |
 | `FY27 Revenue` | Jul-26 actuals rolled to Sub-LOB × Level 2, with the target location name in col E. |
-| `Extract_for_Locations 25 Aug 26`, `Extract for Accounts 25 Aug 26` | Paste targets the lookups read against. |
+| `Extract_for_Locations 25 Aug 26`, `Extract for Accounts 25 Aug 26` | Paste targets the lookups read against. The locations tab carries six extra rows past the export — see below. |
 | `Jul Check - By Line Item` | Every line item, revenue sheet vs data load, with a Difference and an OK/not flag. |
 | `Monthly Totals Check` | Month totals both sides. Extends by one row per month as FY27 fills out. |
 
 Jul-26 loads as `Revenue - AUD Million` (style link 7868) against organization link 37395, over
-the record window 2026-07-01 to 2026-07-31, totalling 731.9 across 24 locations and 28 accounts.
+the record window 2026-07-01 to 2026-07-31, totalling 731.9 across 28 locations and 28 accounts —
+one location per Sub-LOB.
 
 ## How the mapping works
 
@@ -38,12 +39,16 @@ Each revenue line maps to a location named `REV_` & UD1 Name/Sub-LOB, and an acc
 locations extract to get its Location Ref:
 
 ```
-=IFERROR(INDEX('Extract_for_Locations 25 Aug 26'!$E$2:$E$5611,
-               MATCH(C2,'Extract_for_Locations 25 Aug 26'!$B$2:$B$5611,0)),"")
+=IFERROR(INDEX('Extract_for_Locations 25 Aug 26'!$E$2:$E$5617,
+               MATCH(C2,'Extract_for_Locations 25 Aug 26'!$B$2:$B$5617,0)),"")
 ```
 
-A Sub-LOB with no matching location returns blank, and the row has to be pointed at a stand-in
-location by hand until one is created.
+A Sub-LOB with no matching location returns blank, which is the signal that the location has to be
+created before the month can load.
+
+Both col C and col D are live formulas on all 67 rows. Where a location is missing, the temptation
+is to hardcode col C to an existing location so col D resolves — that is what Jul-26 did for nine
+rows, and it silently posts revenue to the wrong place. Create the location instead.
 
 ## Monthly process
 
@@ -56,10 +61,11 @@ location by hand until one is created.
 
 ## Jul-26 — lines with no location
 
-Six `REV_` names the Jul-26 upload wants do not exist in the 25 Aug 26 locations extract, so nine
-rows of `Account_Setup_and_Data_Load` are pointed at a stand-in location:
+Six `REV_` names the Jul-26 upload wants did not exist in the 25 Aug 26 locations extract. Nine rows
+of `Account_Setup_and_Data_Load` had been pointed at a stand-in location to get a Location Ref;
+they now point at their own, and the six locations are set up ready to load:
 
-| Wanted location | Stand-in now in the load | Setup rows | Jul-26 line items |
+| Location | Stand-in it replaced | Setup rows | Jul-26 line items |
 | --- | --- | --- | --- |
 | `REV_E&U Asset Management (ANZ)` | `REV_EU Gap` | 32 | E&U Asset Management (Australia) |
 | `REV_Passenger New Supply and Delivery` | `REV_Passenger North` | 51 | RTS QLD |
@@ -67,6 +73,9 @@ rows of `Account_Setup_and_Data_Load` are pointed at a stand-in location:
 | `REV_Passenger Through Life Support` | `REV_Passenger North` | 53–54 | TLS Fleet, TLS Projects |
 | `REV_Emerging Markets` | `REV_RTS Opportunities` | 55–57 | RTS FREIGHT, Engineering Consulting, RTS Digital |
 | `REV_Intercompany Elimination` | `REV_RTS Head Office` | 59 | Intercompany Elimination |
+
+**Load in this order**, or the data load will fail on a Location Ref Envizi does not know yet:
+locations → group memberships → `Account_Setup_and_Data_Load`.
 
 Only the *location* is a stand-in. Col H already carries the true account name on these rows —
 `FY27REV_Emerging Markets`, not `FY27REV_RTS Opportunities` — so the accounts need no rework.
@@ -114,20 +123,37 @@ locations missing the Portfolio membership. They look like gaps rather than a pa
 Both files keep the templates' headers, column widths and `Sheet1` reference tab unchanged, and add
 a `Notes` tab recording which upload rows each location serves and where its attributes came from.
 
+### The six rows added to the locations extract tab
+
+`Account_Setup_and_Data_Load` col D resolves its Location Ref by looking the location name up in the
+`Extract_for_Locations 25 Aug 26` tab. The six new locations are not in that export — they do not
+exist in Envizi yet — so the nine rows would resolve to blank.
+
+The six are therefore appended to that tab as rows 5612–5617, each carrying `PENDING LOAD` in its
+Notes cell, and the lookup range in both sheets is widened from `$5611` to `$5617` to reach them.
+They hold the same values the locations setup file creates, so a real re-export after loading will
+agree with them. **Replace them by repasting a fresh export** once the locations exist; leaving them
+is harmless, since the lookup takes the first match and a repaste overwrites these rows anyway.
+
 ### Verification
 
 - Every group row references a location and Location Ref the locations file creates.
-- Simulating the load against the extract, all 67 rows of the setup workbook resolve to their own
-  location, none left unmatched.
+- All 67 rows of `Account_Setup_and_Data_Load` resolve a Location Ref; none blank.
+- 28 distinct locations against 28 distinct accounts — every Sub-LOB now has its own.
+- Only the 18 intended cells changed (col C and col D of the nine rows). Every other cached value in
+  the workbook is byte-identical to before the repoint.
+- Simulating `MATCH`/`INDEX` independently over the extract tab, all 134 col C/D cells agree with
+  their stored values, so the workbook recalculates to what it currently shows. None of the six new
+  names is shadowed by an earlier row in col B.
+- `Jul Check - By Line Item` is OK on all 67 line items with every difference zero; `Monthly Totals
+  Check` ties at 731.9 both sides, difference 0. Repointing moves which location a row posts to, not
+  any amount, so both check tabs are unchanged by it.
 
 ## Open items
 
-- **The two setup files have not been loaded into Envizi.** Locations first, then group memberships
-  — new locations are unassigned until the second file goes in.
-- **The setup workbook still points at the stand-ins.** Loading the six locations does not move the
-  revenue on its own. Rows 32 and 51–59 of `Account_Setup_and_Data_Load` (and `Prep - with formulas`)
-  need repointing at the new locations and refs afterwards. `Prep` col D picks the ref up
-  automatically once a refreshed locations extract is pasted in; col C is the manual part.
+- **Nothing has been loaded into Envizi yet.** Order matters: locations, then group memberships,
+  then `Account_Setup_and_Data_Load`. The data load references Location Refs that do not exist until
+  the first file is in, and new locations stay unassigned until the second is.
 - **Nine rows, not the ten originally expected.** Counted three ways — the workbook's Location Ref
   lookups, the `Jul Check - By Line Item` tab, and exact and whitespace-normalised matching of all
   28 wanted `REV_` names against the extract. Each gives the same nine rows over six locations. The
