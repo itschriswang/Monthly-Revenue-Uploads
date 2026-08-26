@@ -7,14 +7,17 @@ One month deep so far: **Jul 2026**.
 
 | File | What it is |
 | --- | --- |
-| `Account_Setup_and_Data_Load_-_PM&C_REVJUL26toJUL26_Setup.xlsx` | **The working file.** The setup and data-load workbook for Jul-26. |
+| `Account_Setup_and_Data_Load_-_PM&C_REVJUL26toJUL26_Setup.xlsx` | **The working file.** The setup and data-load workbook for Jul-26, all 67 rows. |
+| `Account_Setup_and_Data_Load_-_PM&C_REVJUL26toJUL26_REMAINING_9_ROWS.xlsx` | **The one still to load.** The nine rows the first upload could not create, 92.9 of the 731.9. Values only, no formulas. See below. |
 | `Actual Revenue Jul 26 -unlinked.xlsx` | The raw Jul-26 actuals extract, links removed. 162 rows on `FY27 Rev` totalling 731.9, plus five JV lines totalling 7.2 on `FY27 JV Rev`. |
-| `Extract_for_Locations 25 Aug 26.csv` | Envizi locations export, 5,610 rows / 4,704 distinct locations. The lookup source for location refs. |
-| `Extract_for_Accounts 25 Aug 26.csv` | Envizi accounts export, 59,163 rows. |
+| `Extract_for_Locations 26 Aug 26.csv` | **Current** locations export, 5,622 rows / 4,710 distinct locations. Includes the six new `REV_` locations. |
+| `Extract_for_Accounts 26 Aug 26.csv` | **Current** accounts export, 59,186 rows. |
+| `Extract_for_Locations 25 Aug 26.csv` | The previous locations export, 5,610 rows / 4,704 locations — the state the workbook was built against. |
+| `Extract_for_Accounts 25 Aug 26.csv` | The previous accounts export, 59,163 rows. |
 | `Setup_locations_TEMPLATE.xlsx` | Bulk location setup template — 946 example rows over 20 columns. |
 | `Setup_Direct_Location_Group_Memberships.xlsx` | Bulk group setup template — 936 example rows over 7 columns. `Sheet1` lists the valid Classification groups. |
-| `Setup_locations_FY27_Jul26_New_Revenue_Locations.xlsx` | Six new locations for the Jul-26 lines that had none. Not yet loaded. |
-| `Setup_Direct_Location_Group_Memberships_FY27_Jul26_New_Revenue_Locations.xlsx` | Group memberships for those six. Load **after** the locations. Not yet loaded. |
+| `Setup_locations_FY27_Jul26_New_Revenue_Locations.xlsx` | Six new locations for the Jul-26 lines that had none. **Loaded 26 Aug 26.** |
+| `Setup_Direct_Location_Group_Memberships_FY27_Jul26_New_Revenue_Locations.xlsx` | Group memberships for those six. **Loaded 26 Aug 26.** |
 | `Account Setup and Data Loading report fields - IBM Documentation.pdf` | Envizi's own field reference for the setup and data-load format. |
 
 ## Setup workbook layout
@@ -157,11 +160,33 @@ is harmless, since the lookup takes the first match and a repaste overwrites the
   Check` ties at 731.9 both sides, difference 0. Repointing moves which location a row posts to, not
   any amount, so both check tabs are unchanged by it.
 
+## What was loaded on 26 Aug 26, and what is left
+
+The data load went in **before** the locations existed, so it split:
+
+| | Rows | Quantity | Outcome |
+| --- | --- | --- | --- |
+| The 58 rows on locations that already existed | 58 | 639.0 | Loaded. Their `FY27REV_` accounts exist and each sits on the right location. |
+| The nine rows on the six new locations | 9 | 92.9 | **Rejected** — their Location Refs did not exist yet. |
+
+The locations and group memberships loaded afterwards and are correct: the 26 Aug export has all six
+with the refs the setup file assigned, each carrying both Classification and Portfolio `Revenue`.
+
+**Load `..._REMAINING_9_ROWS.xlsx`, not the full workbook.** Record Entry Method is `Insert`, so
+re-running all 67 rows would post July a second time for the 58 that already went in — 639.0 of
+double-counted revenue. The remaining-rows file holds only the nine, as plain values, and every
+location and ref in it was checked against the 26 Aug export.
+
+Confirm July reads 639.0 in Envizi before loading it. If it reads 0, the first upload created the
+accounts without posting records, and the full 67-row workbook is what you want instead.
+
 ## Open items
 
-- **Nothing has been loaded into Envizi yet.** Order matters: locations, then group memberships,
-  then `Account_Setup_and_Data_Load`. The data load references Location Refs that do not exist until
-  the first file is in, and new locations stay unassigned until the second is.
+- **The nine remaining rows have not been loaded.** Everything else for Jul-26 is in.
+- **The workbook's extract tabs still hold the 25 Aug export**, including the six placeholder rows.
+  Repaste the 26 Aug CSVs over them when convenient. The lookups are whole-column now, so a larger
+  extract can be pasted in without adjusting any range — the earlier hardcoded bound would have
+  silently missed rows past it.
 - **Nine rows, not the ten originally expected.** Counted three ways — the workbook's Location Ref
   lookups, the `Jul Check - By Line Item` tab, and exact and whitespace-normalised matching of all
   28 wanted `REV_` names against the extract. Each gives the same nine rows over six locations. The
