@@ -5,8 +5,9 @@ Monthly revenue actuals and the account setup / data load workbooks built from t
 ## Layout
 
 ```
-FY26/   Jul 2025 – Jun 2026
-FY27/   Jul 2026 – Jun 2027
+FY26/                   Jul 2025 – Jun 2026
+FY27/                   Jul 2026 – Jun 2027
+Unallocated Accounts/   Unallocated-account trackers, by MDS cycle
 ```
 
 Each fiscal year folder contains:
@@ -44,30 +45,9 @@ Files produced from the templates for a given month keep the cycle in the name, 
 covering the nine Jul-26 upload rows that had none. Each carries a `Notes` tab recording which upload
 rows it serves and which existing location its attributes were copied from.
 
-## Unallocated accounts tracker
+## Unallocated accounts
 
-Accounts sitting against the `Unallocated Accounts` location in Envizi are worked in a tracker
-built on the May-26 template:
-
-- **`Unallocated_Accounts_FY26_May26.xlsx`** — the May 2026 cycle; the template the tracker follows.
-- **`Unallocated_Accounts_FY27_Aug26.xlsx`** — the current cycle, built from the 25 Aug 2026 extracts
-  in `FY27/`. This is the working file.
-- **`Unallocated Accounts - Proposed Location Links.csv` / `.xlsx`** — the flat review that fed the
-  Aug-26 tracker (136 accounts, match basis and confidence per account). Superseded as a working
-  document by the tracker above; kept as the evidence trail behind its Notes columns.
-
-### Tracker layout
-
-| Tab | Contents |
-| --- | --- |
-| `1 - Electricity Gas NMI` | Electricity / natural gas accounts, matched by NMI to an account already allocated to a location. |
-| `2 - Fuel Cards FTC` | Fuel card accounts, matched by job / cost-centre number to a location reference. |
-| `3 - BOC Viva` | BOC and Viva stationary fuel and gas, matched by invoice delivery address. |
-| `How to Refresh` | The six-step refresh procedure, plus what changed from the May-26 file. |
-| `MDS Extract`, `Location Extract`, `Accounts Extract` | Paste targets the working tabs look up against. |
-| `BOC_*`, `VIVA_*` | Supplier invoice files, carried over from the May-26 tracker. |
-
-Formula columns are live and read from the three extract tabs; yellow columns are manual. Refresh
-for a new cycle by following `How to Refresh` — export the three extracts from Envizi, paste them in,
-fill the helper columns down, then review the working tabs for accounts that have been allocated
-since (delete) or newly appeared (classify into a section).
+Accounts sitting against the `Unallocated Accounts` location in Envizi are worked in a tracker built
+on the May-26 template. The workbooks and the full write-up live in **`Unallocated Accounts/`** — see
+[`Unallocated Accounts/README.md`](Unallocated%20Accounts/README.md) for the tab layout, the refresh
+procedure and the open items on the current cycle.
