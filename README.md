@@ -6,7 +6,7 @@ Monthly revenue actuals and the account setup / data load workbooks built from t
 
 ```
 FY26/                   Jul 2025 – Jun 2026
-FY27/                   Jul 2026 – Jun 2027
+FY27/                   Jul 2026 – Jun 2027          see FY27/README.md
 Unallocated Accounts/   Unallocated-account trackers, by MDS cycle
 ```
 
@@ -26,24 +26,15 @@ Each fiscal year folder contains:
 ## New revenue locations
 
 The setup workbook maps each revenue line to a location named `REV_` & UD1 Name/Sub-LOB. When a
-month introduces a Sub-LOB that has no such location, its rows have to ride on a substitute until
-the location is created. Two bulk-upload templates in `FY27/` cover that:
+month introduces a Sub-LOB that has no such location, its rows have to ride on a stand-in until the
+location is created. Two bulk-upload templates in `FY27/` cover that — `Setup_locations_TEMPLATE.xlsx`
+for the locations, then `Setup_Direct_Location_Group_Memberships.xlsx` for the groups, which are
+unassigned until it is loaded.
 
-- **`Setup_locations_TEMPLATE.xlsx`** — bulk location setup. Australian rows are Region `North Ryde`
-  / `North Ryde [New South Wales]` on `Default station` with no weather station; New Zealand rows are
-  `Auckland` / `Auckland [New Zealand]` on `Manual over-ride` with `Auckland, Whenuapai Aws`. Copy the
-  region and weather-station block from an equivalent location rather than deriving it.
-- **`Setup_Direct_Location_Group_Memberships.xlsx`** — bulk group setup, loaded *after* the locations,
-  which are unassigned until it is. `Sheet1` lists the valid Classification groups.
-
-Existing `REV_` locations carry two memberships: Classification `Operational Control` > division, and
-Portfolio `Revenue`. Both are needed for a new location to report like its peers.
-
-Files produced from the templates for a given month keep the cycle in the name, e.g.
-`Setup_locations_FY27_Jul26_New_Revenue_Locations.xlsx` and
-`Setup_Direct_Location_Group_Memberships_FY27_Jul26_New_Revenue_Locations.xlsx` — six locations
-covering the nine Jul-26 upload rows that had none. Each carries a `Notes` tab recording which upload
-rows it serves and which existing location its attributes were copied from.
+Copy the region and weather-station block from an equivalent location rather than deriving it, and
+give each new location both memberships its peers carry: Classification `Operational Control` >
+division, and Portfolio `Revenue`. See [`FY27/README.md`](FY27/README.md) for the conventions in
+full and for the Jul-26 files built this way.
 
 ## Unallocated accounts
 
