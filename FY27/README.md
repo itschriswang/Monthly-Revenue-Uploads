@@ -123,6 +123,14 @@ locations missing the Portfolio membership. They look like gaps rather than a pa
 Both files keep the templates' headers, column widths and `Sheet1` reference tab unchanged, and add
 a `Notes` tab recording which upload rows each location serves and where its attributes came from.
 
+The group memberships template links to an external workbook — someone's OneDrive copy of an Envizi
+location export — which its own formula columns read. The rows built from it hold plain values and
+no formulas, so that link is dropped rather than carried over. Keeping it broke the file: the tooling
+that wrote it kept only one of the link's two relationships while still pointing at the other, and
+Excel offered to repair the file on open. If a future build of either file draws a repair prompt,
+that dangling reference is the first thing to check — every `r:id` in a part must resolve in that
+part's `.rels`.
+
 ### The six rows added to the locations extract tab
 
 `Account_Setup_and_Data_Load` col D resolves its Location Ref by looking the location name up in the
