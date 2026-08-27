@@ -8,6 +8,7 @@ One month deep so far: **Jul 2026**.
 | File | What it is |
 | --- | --- |
 | `Account_Setup_and_Data_Load_-_PM&C_REVJUL26toJUL26_Setup.xlsx` | **The working file, and the one to upload.** All 67 Jul-26 rows, built against the 26 Aug extracts. |
+| `Account_Setup_and_Data_Load_-_PM&C_JVREVJUL26toJUL26_Setup.xlsx` | **The JV revenue exclusion counterpart — also to upload.** Five Jul-26 rows loading the JV revenue as negatives (-7.2), so reporting nets to revenue excluding JVs. See [JV revenue exclusion](#jv-revenue-exclusion). |
 | `Actual Revenue Jul 26 -unlinked.xlsx` | The raw Jul-26 actuals extract, links removed. 162 rows on `FY27 Rev` totalling 731.9, plus five JV lines totalling 7.2 on `FY27 JV Rev`. |
 | `Extract_for_Locations 26 Aug 26.csv` | **Current** locations export, 5,622 rows / 4,710 distinct locations. Includes the six new `REV_` locations. Pasted into the workbook tab of the same name. |
 | `Extract_for_Accounts 26 Aug 26.csv` | **Current** accounts export, 59,186 rows. Its 146 `REV_` rows are pasted into the workbook's accounts tab. |
@@ -58,8 +59,33 @@ rows, and it silently posts revenue to the wrong place. Create the location inst
 2. Extend the workbook to cover the new month; the filename range moves,
    e.g. `REVJUL26toJUL26` → `REVJUL26toAUG26`.
 3. Check for Sub-LOBs with no location (see below) and set them up before loading.
-4. Verify before relying on it: recalculate all formulas (zero errors), and confirm the month's
+4. Extend the JV exclusion workbook the same way — one column per month on its `FY27 JV Rev`
+   source tab, five negative rows per month on its data load (see below).
+5. Verify before relying on it: recalculate all formulas (zero errors), and confirm the month's
    check tabs tie out — every line item OK and the monthly total matching both sides.
+
+## JV revenue exclusion
+
+JV and associate revenue is included in the main revenue tab by default (confirmed 27 Aug 26), but
+is to be excluded from all revenue figures. `Account_Setup_and_Data_Load_-_PM&C_JVREVJUL26toJUL26_Setup.xlsx`
+— the FY27 counterpart of FY26's `JVREVJUL25toJUN26` workbook — loads the five JV lines from the
+actuals extract's `FY27 JV Rev` tab as **negatives** against the JV-specific `REV_<name>` locations,
+so reporting nets to revenue excluding JVs. Jul 26: BIA -3.8, EDI Rail- Bombardier Transportation
+-3.4, and zeros for Allied Asphalt, Emulco and Isaac Asphalt (-7.2 in total against the 731.9).
+
+Points established while building it (see the workbook's `FY27 JV Revenue` tab notes for the full
+record):
+
+- All five `REV_<name>` JV locations already exist **open** in Envizi (reopened for the FY26 load),
+  each with both Classification and Portfolio `Revenue` memberships — no location setup needed.
+  The five `FY27REV_<name>` accounts don't exist yet; the load creates them.
+- In the main tab, BIA rides inside `REV_Transport & Infrastructure AU`, and EDI Rail- Bombardier
+  appears as the **"WA JV"** line under TLS Fleet inside `REV_Passenger Through Life Support`.
+  (The FY26 workbook's note 4 says EDI was not in the FY26 figures — that's wrong: it's the
+  "WA JV" line there too, 35.9 vs 35.6 deducted. The FY26 loaded amounts are unaffected.)
+- The deduction uses the JV-source figures, which differ from the main tab by rounding — Jul 26
+  leaves a 0.1 residual ("WA JV" 3.5 in the main tab vs EDI 3.4 deducted), the same class of
+  residual FY26 documented for BIA (69.9 vs 70.1).
 
 ## Jul-26 — lines with no location
 
