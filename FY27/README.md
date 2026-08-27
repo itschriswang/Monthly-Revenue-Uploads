@@ -9,7 +9,7 @@ One month deep so far: **Jul 2026**.
 | --- | --- |
 | `Account_Setup_and_Data_Load_-_PM&C_REVJUL26toJUL26_Setup.xlsx` | **The working file, and the one to upload.** All 67 Jul-26 rows, built against the 26 Aug extracts. |
 | `Account_Setup_and_Data_Load_-_PM&C_JVREVJUL26toJUL26_Setup.xlsx` | **The JV revenue exclusion counterpart — also to upload.** Five Jul-26 rows loading the JV revenue as negatives (-7.2), so reporting nets to revenue excluding JVs. See [JV revenue exclusion](#jv-revenue-exclusion). |
-| `Actual Revenue Jul 26 -unlinked.xlsx` | The raw Jul-26 actuals extract, links removed. 162 rows on `FY27 Rev` totalling 731.9, plus five JV lines totalling 7.2 on `FY27 JV Rev`. |
+| `Actual Revenue Jul 26 -unlinked.xlsx` | The raw Jul-26 actuals extract, links removed. 162 rows on `FY27 Rev` totalling 731.9, plus five JV lines totalling 7.2 on `FY27 JV Rev`. Replaced 27 Aug 26 with finance's corrected copy — the original's first (Division) column was mis-copied (values misaligned for ~74 rows, plus a duplicated column shifting the labels). Amounts, Sub-LOB names and the JV tab are identical, and the setup workbook's roll-up already carried the correct divisions, so neither upload changes. |
 | `Extract_for_Locations 26 Aug 26.csv` | **Current** locations export, 5,622 rows / 4,710 distinct locations. Includes the six new `REV_` locations. Pasted into the workbook tab of the same name. |
 | `Extract_for_Accounts 26 Aug 26.csv` | **Current** accounts export, 59,186 rows. Its 146 `REV_` rows are pasted into the workbook's accounts tab. |
 | `Extract_for_Locations 25 Aug 26.csv` | The previous locations export, 5,610 rows / 4,704 locations — the state the workbook was originally built against. |
