@@ -7,13 +7,10 @@ One month deep so far: **Jul 2026**.
 
 | File | What it is |
 | --- | --- |
-| `Account_Setup_and_Data_Load_-_PM&C_REVJUL26toJUL26_Setup.xlsx` | **The working file, and the one to upload.** All 67 Jul-26 rows, built against the 26 Aug extracts. |
-| `Account_Setup_and_Data_Load_-_PM&C_JVREVJUL26toJUL26_Setup.xlsx` | **The JV revenue exclusion counterpart — also to upload.** Five Jul-26 rows loading the JV revenue as negatives (-7.2), so reporting nets to revenue excluding JVs. See [JV revenue exclusion](#jv-revenue-exclusion). |
+| `Account_Setup_and_Data_Load_-_PM&C_REVJUL26toJUL26_Setup.xlsx` | **The working file, and the one to upload.** All 72 Jul-26 rows — 67 revenue lines (731.9) plus the five JV exclusion rows (-7.2), one upload netting 724.7 — built against the 26 Aug extracts. See [JV revenue exclusion](#jv-revenue-exclusion). |
 | `Actual Revenue Jul 26 -unlinked.xlsx` | The raw Jul-26 actuals extract, links removed. 162 rows on `FY27 Rev` totalling 731.9, plus five JV lines totalling 7.2 on `FY27 JV Rev`. Replaced 27 Aug 26 with finance's corrected copy — the original's first (Division) column was mis-copied (values misaligned for ~74 rows, plus a duplicated column shifting the labels). Amounts, Sub-LOB names and the JV tab are identical, and the setup workbook's roll-up already carried the correct divisions, so neither upload changes. |
 | `Extract_for_Locations 26 Aug 26.csv` | **Current** locations export, 5,622 rows / 4,710 distinct locations. Includes the six new `REV_` locations. Pasted into the workbook tab of the same name. |
 | `Extract_for_Accounts 26 Aug 26.csv` | **Current** accounts export, 59,186 rows. Its 146 `REV_` rows are pasted into the workbook's accounts tab. |
-| `Extract_for_Locations 25 Aug 26.csv` | The previous locations export, 5,610 rows / 4,704 locations — the state the workbook was originally built against. |
-| `Extract_for_Accounts 25 Aug 26.csv` | The previous accounts export, 59,163 rows. |
 | `Setup_locations_TEMPLATE.xlsx` | Bulk location setup template — 946 example rows over 20 columns. |
 | `Setup_Direct_Location_Group_Memberships.xlsx` | Bulk group setup template — 936 example rows over 7 columns. `Sheet1` lists the valid Classification groups. |
 | `Setup_locations_FY27_Jul26_New_Revenue_Locations.xlsx` | Six new locations for the Jul-26 lines that had none. **Loaded 26 Aug 26.** |
@@ -24,16 +21,17 @@ One month deep so far: **Jul 2026**.
 
 | Tab | Contents |
 | --- | --- |
-| `Account_Setup_and_Data_Load` | The load itself — 67 rows, values only. This is what goes to Envizi. |
-| `Prep - with formulas` | The same 67 rows with the formulas that build them, so the load can be rederived. |
-| `FY27 Revenue` | Jul-26 actuals rolled to Sub-LOB × Level 2, with the target location name in col E. |
+| `Account_Setup_and_Data_Load` | The load itself — 72 rows (67 revenue + 5 JV exclusion), values only. This is what goes to Envizi. |
+| `Prep - with formulas` | The same 72 rows with the formulas that build them, so the load can be rederived. |
+| `FY27 Revenue` | Jul-26 actuals rolled to Sub-LOB × Level 2, with the target location name in col E, followed by the five JV exclusion rows (negatives, linked from `FY27 JV Rev`) and the JV notes. |
+| `FY27 JV Rev` | The actuals extract's JV tab, copied verbatim — the source the JV exclusion rows negate. |
 | `Extract_for_Locations 26 Aug 26`, `Extract for Accounts 26 Aug 26` | Paste targets the lookups read against, holding the 26 Aug exports. The tabs are named for the export pasted into them, so both they and the formulas that read them move on each refresh. |
 | `Jul Check - By Line Item` | Every line item, revenue sheet vs data load, with a Difference and an OK/not flag. |
 | `Monthly Totals Check` | Month totals both sides. Extends by one row per month as FY27 fills out. |
 
 Jul-26 loads as `Revenue - AUD Million` (style link 7868) against organization link 37395, over
-the record window 2026-07-01 to 2026-07-31, totalling 731.9 across 28 locations and 28 accounts —
-one location per Sub-LOB.
+the record window 2026-07-01 to 2026-07-31, netting 724.7 (731.9 revenue less 7.2 JV) across 33
+locations and 33 accounts — one location per Sub-LOB, plus one per JV.
 
 ## How the mapping works
 
@@ -49,7 +47,7 @@ locations extract to get its Location Ref:
 A Sub-LOB with no matching location returns blank, which is the signal that the location has to be
 created before the month can load.
 
-Both col C and col D are live formulas on all 67 rows. Where a location is missing, the temptation
+Both col C and col D are live formulas on all 72 rows. Where a location is missing, the temptation
 is to hardcode col C to an existing location so col D resolves — that is what Jul-26 did for nine
 rows, and it silently posts revenue to the wrong place. Create the location instead.
 
@@ -59,22 +57,24 @@ rows, and it silently posts revenue to the wrong place. Create the location inst
 2. Extend the workbook to cover the new month; the filename range moves,
    e.g. `REVJUL26toJUL26` → `REVJUL26toAUG26`.
 3. Check for Sub-LOBs with no location (see below) and set them up before loading.
-4. Extend the JV exclusion workbook the same way — one column per month on its `FY27 JV Rev`
-   source tab, five negative rows per month on its data load (see below).
+4. Extend the JV exclusion block the same way — one column per month on the `FY27 JV Rev`
+   source tab, five negative rows per month on the load (see below).
 5. Verify before relying on it: recalculate all formulas (zero errors), and confirm the month's
    check tabs tie out — every line item OK and the monthly total matching both sides.
 
 ## JV revenue exclusion
 
 JV and associate revenue is included in the main revenue tab by default (confirmed 27 Aug 26), but
-is to be excluded from all revenue figures. `Account_Setup_and_Data_Load_-_PM&C_JVREVJUL26toJUL26_Setup.xlsx`
-— the FY27 counterpart of FY26's `JVREVJUL25toJUN26` workbook — loads the five JV lines from the
-actuals extract's `FY27 JV Rev` tab as **negatives** against the JV-specific `REV_<name>` locations,
-so reporting nets to revenue excluding JVs. Jul 26: BIA -3.8, EDI Rail- Bombardier Transportation
--3.4, and zeros for Allied Asphalt, Emulco and Isaac Asphalt (-7.2 in total against the 731.9).
+is to be excluded from all revenue figures. Unlike FY26, which used a separate `JVREVJUL25toJUN26`
+workbook, FY27 carries the deduction **inside the setup workbook** as rows 69–73 of the load — the
+five JV lines from the actuals extract's `FY27 JV Rev` tab loading as **negatives** against the
+JV-specific `REV_<name>` locations, so one upload nets to revenue excluding JVs. Jul 26: BIA -3.8,
+EDI Rail- Bombardier Transportation -3.4, and zeros for Allied Asphalt, Emulco and Isaac Asphalt
+(-7.2 against the 731.9, netting 724.7). Their Record References are prefixed `JV Exclusion - ` so
+they stay distinct from the revenue lines (`BIA` appears in both), and both check tabs cover them
+like any other line.
 
-Points established while building it (see the workbook's `FY27 JV Revenue` tab notes for the full
-record):
+Points established while building it (recorded in full in the notes under the `FY27 Revenue` tab):
 
 - All five `REV_<name>` JV locations already exist **open** in Envizi (reopened for the FY26 load),
   each with both Classification and Portfolio `Revenue` memberships — no location setup needed.
@@ -211,7 +211,8 @@ depends on the six placeholder rows that stood in before the locations were real
 ## Open items
 
 - **The July reload has not been done.** Delete the existing Jul-26 records first, then upload the
-  `Account_Setup_and_Data_Load` tab of the setup workbook — all 67 rows, 731.9.
+  `Account_Setup_and_Data_Load` tab of the setup workbook — all 72 rows, netting 724.7
+  (67 revenue lines at 731.9 plus the five JV exclusion rows at -7.2).
 - **Nine rows, not the ten originally expected.** Counted three ways — the workbook's Location Ref
   lookups, the `Jul Check - By Line Item` tab, and exact and whitespace-normalised matching of all
   28 wanted `REV_` names against the extract. Each gives the same nine rows over six locations. The
