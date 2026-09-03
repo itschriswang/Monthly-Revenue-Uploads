@@ -40,18 +40,43 @@ In scope: the green AU Large Electricity rows. Named exclusions: the three North
 in the register's large market rows at all, and in Envizi already carries `LGCS_HCMT` and the SEC VIC
 100% Renewable Deduction at HCMT - East Pakenham Depot.
 
-New Zealand: the 158 NZ green rows are all contracted to Ecotricity, but only 26 of those ICPs exist as
-electricity accounts in Envizi and 20 of them already have the Ecotricity `_CERTS` copy. They are not
-in this load. The six that are matched and uncovered are Meridian NTOU sites moving to Ecotricity:
-`0000052765HB960`, `0000935815TU2F3`, `0003140222AAD30`, `0007821200WMAC9`, `0088966150PCC88`,
-`1000620792PC805` — worth a separate pass once the Ecotricity switch is confirmed for them.
+## Is the renewable product LGCs?
+
+For Engie and Origin, yes — `Rates & Source Data` in the budget workbook prices both renewal contracts
+with an explicit LGC line, FY27 0.395 c/kWh (Engie) and 0.375 (Origin), FY28 0.375, plus a
+"renewable product $/yr". That is 68 of the 78 green sites. The Alinta (WA) and Shell (TAS) contracts
+are modelled as an all-in delivered rate with no separate LGC line; Category Management confirms they
+are renewable (3 Sep 26: all AU large market sites except the NT are renewable, no small market site
+is), and the Alinta accounts already show 100% green kWh in Envizi. The existing `LGCS_<NMI>`
+accounts are the same mechanism recorded the Envizi way — 55 of the 69 were created in one batch on
+12 Mar 2024 and 11 on 27 Jun 2025. Whether any of them hold data is not visible in the accounts
+extract or the electricity summary; a `Certificates - Location` data export would show it. An empty
+one is the virtual meter for that site, which is why a location that has one is excluded here rather
+than given a second account.
+
+Because of that, the Review tab carries an **Account pattern** input (C14): `Ecotricity - account_CERTS`
+(as built) or `AU LGC - LGCS_NMI`, which names the 18 `LGCS_<NMI>` with supplier and reader `LGCs`, the
+same as the existing 69. Cols E, H, J and K of the load tab read the Review and Prep tabs, so the
+switch and the style link flow straight through; every other load column is a value.
+
+## New Zealand
+
+All NZ electricity is renewable under the new arrangements — the 26 TOU sites on Ecotricity since
+1 Jul 26, and the 132 NTOU sites moving to Ecotricity on 1 Jan 27. Against Envizi, 114 of the 158 NZ
+green ICPs resolve to 80 open locations: 26 on active accounts, 82 through the closed `<ref>_ICP_<icp>`
+accounts that were replaced by the per-location `<ref>_Electricity - Purchased from grid` accounts in
+2023, and 6 by a unique street-address match. 29 of those locations already have a CERTS account (the
+Ecotricity TOU copies). 44 cannot be placed from the extracts — 40 are not in Envizi under any field,
+4 sit only at `_CLOSED_` locations. None are in this load: the NTOU contract has not started, and for a
+site whose consumption sits on a per-location account rather than an `Eco_ICP_` account the pattern
+to copy needs deciding first.
 
 ## What the review found
 
 Of the 78 green rows:
 
 - **52 already have an LGC account at the location** (`LGCS_<NMI>`, style `Certificates - Location - kWh`) — excluded. 51 are on the same NMI; Shepparton (308) is covered by `LGCS_VCCCSC0020` on a different NMI to the register's `6204134328`, so it is excluded on the location rule with a note to confirm that LGC account still relates to the site.
-- **7 are the WA Alinta accounts**, whose own green component has recorded 100% green kWh since the 1 Jul 26 Alinta contract (Jul–Aug 26 in the summary, with negative CO2e) — an offset is already in place without a separate certificate account, so they are excluded on that basis. Flip the Decision to `Create` on the Review tab if a certificate account is wanted as well.
+- **7 are the WA Alinta accounts**, whose own green component has recorded 100% green kWh since the 1 Jul 26 Alinta contract (Jul–Aug 26 in the summary, with negative CO2e) — an offset is already in place without a separate certificate account, so they are excluded on that basis. The Alinta contract is an all-in rate with no separate LGC line in the rate model. Flip the Decision to `Create` on the Review tab if a certificate account is wanted as well.
 - **1 is QTMP** — named exclusion.
 - **18 have no offset of either kind** — the load.
 
@@ -103,7 +128,8 @@ Modelled on the Ecotricity virtual accounts (`Copy of Eco_ICP_..._CERTS`): same 
 market account, account style `Certificates - Location - kWh`, account number = the large market account
 number + `_CERTS` (prefix and suffix are inputs on the Review tab; the `Copy of ` Envizi's copy function
 adds is left off), Account Reference = the NMI, Supplier = the contracted retailer under the renewal in
-Envizi's naming (EngieAU / Origin / ShellEnergyAU), Reader blank.
+Envizi's naming (EngieAU / Origin / ShellEnergyAU), Reader blank. The Account pattern input switches all
+of that to the `LGCS_<NMI>` convention in one step.
 
 Envizi will not create an account from this template without a record, so each row carries one
 placeholder record — the contract's first month, 2026-07-01 to 2026-07-31, Quantity 0, Entry Method
