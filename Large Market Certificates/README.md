@@ -22,6 +22,8 @@ The accounts and locations extracts it reads are the ones in `../FY27/` (`Extrac
 | `Prep - with formulas` | The same 18 rows built by formula from the Review tab, keyed on the Connection ID in col V, so the load can be rederived or extended. |
 | `Review - AU Large Market` | One row per AU Large Electricity register row (81). Inputs at the top; the match, the offset checks, a suggested decision by formula, the Decision itself as a dropdown, and the proposed account fields. |
 | `Check` | Tie-outs: decisions add up, load rows equal the Create count, no duplicate or pre-existing account numbers, no blank location refs, Prep and load agree, style link filled. |
+| `Manual Setup Checklist` | The worklist for creating and linking the 18 by hand — every field to key in, the source account to link, the incoming retailer's account to add when live, and a Status dropdown. |
+| `LGCS Accounts to Check` | The 54 existing certificate accounts at the 40 in-scope sites that already have one. Record whether each holds data and the Action column says reuse (link as the virtual meter) or create new. |
 | `Notes` | How it was built and what was assumed. |
 | `Site Register (AU Large)`, `Extract for Accounts 03 Sep 26`, `Extract_for_Locations 26 Aug 26`, `Envizi Summary Jun-Aug 26` | The source rows the formulas read. The accounts tab is filtered to the register NMIs plus every certificate account, with the same helper columns the unallocated tracker uses. |
 
@@ -134,6 +136,43 @@ of that to the `LGCS_<NMI>` convention in one step.
 Envizi will not create an account from this template without a record, so each row carries one
 placeholder record — the contract's first month, 2026-07-01 to 2026-07-31, Quantity 0, Entry Method
 `Overwrite` — which the real certificate quantity for that month replaces when it is loaded.
+
+## A virtual meter has to be empty — setting them up by hand
+
+Envizi only lets an account be set up as a virtual meter (its records calculated from a source
+account) while it holds no records, and the PM&C template cannot create an account without a record.
+So the load tab is **not uploaded** for this purpose — its placeholder row would leave every new account
+non-empty. It stays as the record of what each account should look like; the `Manual Setup Checklist`
+tab is the worklist.
+
+Per account:
+
+1. **Create it empty.** Open the location and Add Account: style `Certificates - Location - kWh`;
+   account number, reference, supplier and reader from the checklist (`LGCS_<NMI>` / NMI / `LGCs` /
+   `LGCs` under the AU LGC pattern). Save without a record. The Ecotricity ones were made by copying
+   the electricity account instead — hence their `Copy of ` prefix; a copy carries no data, so either
+   route works.
+2. **Link it.** Open the new account and set it up as a virtual meter: source = the large market
+   electricity account in the checklist, 100%, add. Where the checklist lists the incoming retailer's
+   account (Mowbray's Shell account, still unallocated; Southbank TAFE and Sunshine Coast Hospital's
+   Engie accounts once they exist), add it as a second 100% source — the two don't overlap in time, so
+   the virtual meter follows the site across the retailer change.
+3. **Check it.** The new account should show kWh equal to the source for the latest months and the
+   location's market-based CO2e should drop to match. Mark Status and Date on the checklist.
+
+The existing `LGCS_` accounts carry Usage Type `Consolidation`, Use `CO2e and Base Measure`,
+Apportionment 0 — match those if the screen offers them, otherwise leave the defaults.
+
+**Reusing the existing `LGCS_` accounts.** The 54 certificate accounts at the 40 sites the review
+excluded are on `LGCS Accounts to Check`. Whether any holds data is not in the accounts extract, and
+the Jun–Aug 26 electricity summary has no certificate rows at all — which points to them being empty
+for those months, but an older annual load would not show there. Check each in Envizi (the account's
+Records / First and Last Record) or from a data export filtered to `Certificates - Location [kWh]`,
+record Yes/No in col I, and the Action column says: **No** → reuse it, link it as the virtual meter of
+the live electricity account(s) listed; **Yes** → leave it as the historical record and create a new
+one via the checklist. Three of the 54 sit on a different NMI to the register's (Shepparton's
+`LGCS_VCCCSC0020`, Hexham Office's `LGCS_4103893142`, RPQ Spray Seal's `LGCS_3120136120`) and are
+flagged amber.
 
 ## Before uploading
 
