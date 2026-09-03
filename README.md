@@ -42,3 +42,7 @@ Accounts sitting against the `Unallocated Accounts` location in Envizi are worke
 on the May-26 template. The workbooks and the full write-up live in **`Unallocated Accounts/`** — see
 [`Unallocated Accounts/README.md`](Unallocated%20Accounts/README.md) for the tab layout, the refresh
 procedure and the open items on the current cycle.
+
+The current cycle is `Unallocated_Accounts_FY27_Sep26.xlsx`, refreshed on
+`FY27/Extract_for_Accounts 03 Sep 26.csv`. The Aug-26 electricity accounts are all allocated; five
+new ones have appeared since and are listed with a proposed location each.
