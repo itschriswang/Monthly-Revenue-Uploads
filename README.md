@@ -5,9 +5,10 @@ Monthly revenue actuals and the account setup / data load workbooks built from t
 ## Layout
 
 ```
-FY26/                   Jul 2025 – Jun 2026
-FY27/                   Jul 2026 – Jun 2027          see FY27/README.md
-Unallocated Accounts/   Unallocated-account trackers, by MDS cycle
+FY26/                        Jul 2025 – Jun 2026
+FY27/                        Jul 2026 – Jun 2027          see FY27/README.md
+Unallocated Accounts/        Unallocated-account trackers, by MDS cycle
+Large Market Certificates/   Renewable certificate virtual accounts for the large market sites
 ```
 
 Each fiscal year folder contains:
@@ -46,3 +47,12 @@ procedure and the open items on the current cycle.
 The current cycle is `Unallocated_Accounts_FY27_Sep26.xlsx`, refreshed on
 `FY27/Extract_for_Accounts 03 Sep 26.csv`. The Aug-26 electricity accounts are all allocated; five
 new ones have appeared since and are listed with a proposed location each.
+
+## Large market certificate accounts
+
+The FY26–28 renewal agreement sites are matched by NMI to their Envizi accounts, checked for an existing
+offset (an `LGCS_` certificate account at the location, or green kWh already recorded on the account's
+own green component), and a `Certificates - Location - kWh` virtual account is set up for each large
+market account that has neither — modelled on the Ecotricity `_CERTS` accounts. The upload and the
+review behind it live in **`Large Market Certificates/`** — see
+[`Large Market Certificates/README.md`](Large%20Market%20Certificates/README.md).

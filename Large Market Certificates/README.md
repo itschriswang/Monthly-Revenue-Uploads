@@ -1,0 +1,119 @@
+# Large Market Certificates
+
+Virtual certificate accounts for the AU large market electricity sites under the FY26–28 renewal
+agreements, and the Envizi upload that creates them.
+
+## Files
+
+| File | What it is |
+| --- | --- |
+| `Account_Setup_and_Data_Load_-_PM&C_LMCERTSJUL26_Setup.xlsx` | **The upload.** 18 new `Certificates - Location - kWh` accounts, one per qualifying large market account, plus the review that produced them. Upload the first tab only. The `Account_Setup_and_Data_Load_-_PM&C_` prefix is what Envizi processes on — keep it. |
+| `Downer_Energy_Contracting_and_Budget_Summary_FY26-28.xlsx` | The renewal agreement site register. `Site Register` has 81 AU Large Electricity rows; the green rows (78) are the large market accounts in scope, the 3 Northern Territory rows are not green. |
+| `ElectricityEnviziSummaryjunejulyaug26.xlsx` | The Jun–Aug 26 monthly summary from Envizi — kWh, cost and CO2e for every electricity account and its green component. Used to confirm each match and to see where an offset is already being recorded. |
+
+The accounts and locations extracts it reads are the ones in `../FY27/` (`Extract_for_Accounts 03 Sep 26.csv`,
+`Extract_for_Locations 26 Aug 26.csv`).
+
+## Workbook layout
+
+| Tab | Contents |
+| --- | --- |
+| `Account_Setup_and_Data_Load` | The load — 18 rows, values, in the template's 21 columns. Col E (Account Style Link) reads the input cell on the Review tab. |
+| `Prep - with formulas` | The same 18 rows built by formula from the Review tab, keyed on the Connection ID in col V, so the load can be rederived or extended. |
+| `Review - AU Large Market` | One row per AU Large Electricity register row (81). Inputs at the top; the match, the offset checks, a suggested decision by formula, the Decision itself as a dropdown, and the proposed account fields. |
+| `Check` | Tie-outs: decisions add up, load rows equal the Create count, no duplicate or pre-existing account numbers, no blank location refs, Prep and load agree, style link filled. |
+| `Notes` | How it was built and what was assumed. |
+| `Site Register (AU Large)`, `Extract for Accounts 03 Sep 26`, `Extract_for_Locations 26 Aug 26`, `Envizi Summary Jun-Aug 26` | The source rows the formulas read. The accounts tab is filtered to the register NMIs plus every certificate account, with the same helper columns the unallocated tracker uses. |
+
+## How the sites were matched
+
+On the connection ID, not the region. The NMI is the text after the last underscore in the Envizi
+account number, so each register row was matched to the active electricity account carrying that NMI
+(Large Market style preferred where a site has more than one) and the location taken from that account.
+All 81 resolved. Five of the NMIs also have a new unallocated account (the Sep-26 unallocated tracker) —
+the allocated one is used.
+
+## Scope
+
+In scope: the green AU Large Electricity rows. Named exclusions: the three Northern Territory sites
+(Jacana; not green in the register either), QTMP (Torbanlea, `3053253239`), and Pakenham — which is not
+in the register's large market rows at all, and in Envizi already carries `LGCS_HCMT` and the SEC VIC
+100% Renewable Deduction at HCMT - East Pakenham Depot.
+
+New Zealand: the 158 NZ green rows are all contracted to Ecotricity, but only 26 of those ICPs exist as
+electricity accounts in Envizi and 20 of them already have the Ecotricity `_CERTS` copy. They are not
+in this load. The six that are matched and uncovered are Meridian NTOU sites moving to Ecotricity:
+`0000052765HB960`, `0000935815TU2F3`, `0003140222AAD30`, `0007821200WMAC9`, `0088966150PCC88`,
+`1000620792PC805` — worth a separate pass once the Ecotricity switch is confirmed for them.
+
+## What the review found
+
+Of the 78 green rows:
+
+- **52 already have an LGC account at the location** (`LGCS_<NMI>`, style `Certificates - Location - kWh`) — excluded. 51 are on the same NMI; Shepparton (308) is covered by `LGCS_VCCCSC0020` on a different NMI to the register's `6204134328`, so it is excluded on the location rule with a note to confirm that LGC account still relates to the site.
+- **7 are the WA Alinta accounts**, whose own green component has recorded 100% green kWh since the 1 Jul 26 Alinta contract (Jul–Aug 26 in the summary, with negative CO2e) — an offset is already in place without a separate certificate account, so they are excluded on that basis. Flip the Decision to `Create` on the Review tab if a certificate account is wanted as well.
+- **1 is QTMP** — named exclusion.
+- **18 have no offset of either kind** — the load.
+
+### New virtual accounts (18)
+
+| New account | Location | Ref | Supplier |
+| --- | --- | --- | --- |
+| `900018218_6305885252_CERTS` | Gippsland Asphalt - Bairnsdale | 103.1 | EngieAU |
+| `50002617982_4001198085_CERTS` | PPP - NSW Schools 2 (Kelso HS) | 9002 | Origin |
+| `50002617969_4001200751_CERTS` | PPP - HQJOC (ACT) | 9092 | Origin |
+| `50002716068_4103689689_CERTS` | PPP - NSW Schools 2 (Ashtonfield PS) | 9008 | Origin |
+| `50002617995_4103705443_CERTS` | PPP - NSW Schools 2 (Warnervale PS) | 9007 | Origin |
+| `50002617993_4103766552_CERTS` | PPP - NSW Schools 2 (Kariong) | 9001 | Origin |
+| `50002617986_4310934278_CERTS` | PPP - NSW Schools 2 (Halinda SSP) | 9010 | Origin |
+| `50002617970_4310938258_CERTS` | PPP - NSW Schools 2 (Ropes Crossing PS) | 9004 | Origin |
+| `50002716071_4310955386_CERTS` | PPP - NSW Schools 2 (Tulimbar PS) | 9006 | Origin |
+| `50002617955_4310957406_CERTS` | PPP - NSW Schools 2 (John Palmer PS) | 9011 | Origin |
+| `50002617959_4310984436_CERTS` | PPP - NSW Schools 2 (Rouse Hill HS) | 9005 | Origin |
+| `50002617988_4311006154_CERTS` | PPP - NSW Schools 2 (Elderslie PS) | 9009 | Origin |
+| `50002617951_4311006155_CERTS` | PPP - NSW Schools 2 (Middleton Grange PS) | 9003 | Origin |
+| `1003074_3116382269_CERTS` | PPP - Southbank TAFE (QLD) | 9108 | EngieAU |
+| `1003075_3120143385_CERTS` | PPP - Sunshine Coast University Hospital | 9078 | EngieAU |
+| `DEDI01_8000002117_8000002117_CERTS` | Asphalt Prod - Hobart (329) | 17030565 | ShellEnergyAU |
+| `DEDI01_8000002963_CERTS` | Austins Ferry | 12 | ShellEnergyAU |
+| `1032371065_8000326927_CERTS` | Asphalt Prod - Mowbray (360) | 360 | ShellEnergyAU |
+
+Three of these are set up against a contracted retailer that differs from the retailer on the live
+Envizi account: Southbank TAFE and Sunshine Coast University Hospital (CS Energy → Engie) and Mowbray
+(Aurora → Shell; Shell's `DEDI01_088_8000326927` is still at Unallocated Accounts, Sep-26 tracker row 5).
+
+### Excluded — an offset already exists (59)
+
+LGC account at the location (52): Asphalt Prod - Hume (101), Mogo (154) ×2, Tamworth, RPQ NSW Moree,
+Auburn ×2, North Ryde T1 L1 ×2 / L3 ×2 / L4, North Ryde T3 L2 / L3, Hexham Office, PPP - SICEEP ×4,
+Teralba (152), Eastern Creek, Rosehill (163) ×2, RPQ NSW Chinderah, Bathurst (156), Somerton (303),
+Utilities Derrimut Office, Shepparton (308), Bayswater (302), Traralgon (300), Dandenong - PAV,
+Mulgrave - Wellington Rd, Wodonga (315), Somerton Emulsion Plant, Corporate - Offices (Cairns QLD),
+RPQ Spray Seal ×2, Richlands, Teneriffe - Brisbane, RPQ Swanbank, Bli Bli (408), Gympie, Brendale (423),
+Archerfield (406), MT-Carrara ×2, Maryborough ×2, Gillman - PAV, Wingfield (523), Largs Bay ×2.
+
+Green component already recording the offset (7, all Alinta WA): LSE - Perth Convention & Exhibition
+Centre ×2, Cannington Emulsion Plant, Maddington - BIT, Albany (601), Geraldton (602), Hope Valley (628).
+
+The full list with the LGC account names sits on the Review tab, filterable on Decision.
+
+## How the new accounts are structured
+
+Modelled on the Ecotricity virtual accounts (`Copy of Eco_ICP_..._CERTS`): same location as the large
+market account, account style `Certificates - Location - kWh`, account number = the large market account
+number + `_CERTS` (prefix and suffix are inputs on the Review tab; the `Copy of ` Envizi's copy function
+adds is left off), Account Reference = the NMI, Supplier = the contracted retailer under the renewal in
+Envizi's naming (EngieAU / Origin / ShellEnergyAU), Reader blank.
+
+Envizi will not create an account from this template without a record, so each row carries one
+placeholder record — the contract's first month, 2026-07-01 to 2026-07-31, Quantity 0, Entry Method
+`Overwrite` — which the real certificate quantity for that month replaces when it is loaded.
+
+## Before uploading
+
+1. **Fill the Account Style Link** for `Certificates - Location - kWh` in the yellow cell on the Review
+   tab (Envizi > Admin > Account Styles). It is mandatory, it is the one value not in any extract, and
+   the Check tab reads `NOT FILLED` until it is there. It flows to col E of the load and prep tabs.
+2. Confirm the Decision column — anything changed from Suggested shows red on the Review tab and counts
+   on the Check tab.
+3. Check tab all OK, recalculate, save, upload the first tab.
