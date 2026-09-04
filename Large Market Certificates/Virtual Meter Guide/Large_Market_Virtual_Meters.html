@@ -9,15 +9,21 @@
 <style>
 :root{
   color-scheme:light;
-  --bg:#F5F8F7; --surface:#FFFFFF; --surface-2:#EAF0EE; --surface-3:#DFE8E5;
-  --ink:#16221E; --ink-2:#4A5955; --ink-3:#77857F; --line:#D5DEDA; --line-2:#C2CFCA;
-  --accent:#0F6E6B; --accent-ink:#FFFFFF; --accent-soft:#DDEFEC; --accent-deep:#0A4F4D;
-  --focus:#0F6E6B;
-  --c1:#2a78d6; --c2:#eb6834; --c3:#1baf7a; --c4:#eda100;           /* validated categorical slots 1-4 */
-  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --critical:#d03b3b; /* fixed status palette */
-  --good-soft:#E3F5E3; --warn-soft:#FFF3D6; --serious-soft:#FDE7DE; --critical-soft:#F9E0E0;
-  --shadow:0 1px 2px rgba(22,34,30,.06), 0 8px 24px -12px rgba(22,34,30,.18);
-  --radius:10px; --radius-s:6px;
+  /* Neutrals lean a hair toward the matcha brand hue (OKLCH ~118) at low chroma,
+     the way the portfolio's do, so a "grey" surface still belongs to the palette. */
+  --bg:oklch(0.978 0.007 118); --surface:#FFFFFF; --surface-2:oklch(0.958 0.010 118); --surface-3:oklch(0.925 0.014 118);
+  --ink:oklch(0.207 0.022 118); --ink-2:oklch(0.470 0.020 118); --ink-3:oklch(0.615 0.017 118);
+  --line:oklch(0.917 0.008 118); --line-2:oklch(0.853 0.013 118);
+  --accent:#6A7614; --accent-ink:#FFFFFF; --accent-soft:#EDF3D2; --accent-deep:#525C0F;
+  --lime:#C1E043; --lime-soft:#E9F2C2; --lime-wash:#F4F9E2; --forest:#21300F;
+  --focus:#6A7614;
+  --c1:#6A7614; --c2:#635BFF; --c3:#C77800; --c4:#E0234E;          /* validated categorical, light */
+  --good:#4F7A16; --warn:#C77800; --serious:#D2622A; --critical:#C21431; /* status, reserved */
+  --good-soft:#E7F0CF; --warn-soft:#FBEDD6; --serious-soft:#FBE4D8; --critical-soft:#FBE0E4;
+  --shadow:0 1px 2px rgba(33,48,15,.05), 0 6px 22px rgba(33,48,15,.07);
+  --shadow-lift:0 16px 44px rgba(33,48,15,.13), 0 4px 12px rgba(33,48,15,.06);
+  --radius:18px; --radius-s:12px; --radius-xs:8px;
+  --ease:cubic-bezier(0.25,1,0.5,1);
   --display:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
   --body:"Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:"JetBrains Mono","Courier New",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -25,24 +31,32 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --bg:#0F1615; --surface:#17201E; --surface-2:#1F2A28; --surface-3:#28352F;
-    --ink:#E8EFEC; --ink-2:#B5C2BD; --ink-3:#83918C; --line:#2A3634; --line-2:#37463F;
-    --accent:#3FB3AE; --accent-ink:#0B1514; --accent-soft:#163634; --accent-deep:#7FD3CF;
-    --focus:#3FB3AE;
-    --c1:#3987e5; --c2:#d95926; --c3:#199e70; --c4:#c98500;
-    --good-soft:#123B14; --warn-soft:#3B2E0C; --serious-soft:#3D2317; --critical-soft:#3D1919;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    --bg:oklch(0.175 0.014 118); --surface:oklch(0.222 0.015 118); --surface-2:oklch(0.263 0.016 118); --surface-3:oklch(0.320 0.017 118);
+    --ink:oklch(0.945 0.010 118); --ink-2:oklch(0.780 0.014 118); --ink-3:oklch(0.630 0.014 118);
+    --line:oklch(0.310 0.014 118); --line-2:oklch(0.385 0.016 118);
+    --accent:#A9BA3C; --accent-ink:#16200A; --accent-soft:#2A3410; --accent-deep:#C6D65C;
+    --lime:#C1E043; --lime-soft:#2E3A12; --lime-wash:#242E0F; --forest:#E9F2C2;
+    --focus:#A9BA3C;
+    --c1:#8B9A2C; --c2:#7A72F0; --c3:#C4831F; --c4:#E85A76;        /* validated categorical, dark */
+    --good:#8B9A2C; --warn:#C4831F; --serious:#D9743F; --critical:#E85A76;
+    --good-soft:#2B3512; --warn-soft:#3A2C0E; --serious-soft:#3A2513; --critical-soft:#3B1B23;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 22px rgba(0,0,0,.35);
+    --shadow-lift:0 16px 44px rgba(0,0,0,.55), 0 4px 12px rgba(0,0,0,.35);
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --bg:#0F1615; --surface:#17201E; --surface-2:#1F2A28; --surface-3:#28352F;
-  --ink:#E8EFEC; --ink-2:#B5C2BD; --ink-3:#83918C; --line:#2A3634; --line-2:#37463F;
-  --accent:#3FB3AE; --accent-ink:#0B1514; --accent-soft:#163634; --accent-deep:#7FD3CF;
-  --focus:#3FB3AE;
-  --c1:#3987e5; --c2:#d95926; --c3:#199e70; --c4:#c98500;
-  --good-soft:#123B14; --warn-soft:#3B2E0C; --serious-soft:#3D2317; --critical-soft:#3D1919;
-  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  --bg:oklch(0.175 0.014 118); --surface:oklch(0.222 0.015 118); --surface-2:oklch(0.263 0.016 118); --surface-3:oklch(0.320 0.017 118);
+  --ink:oklch(0.945 0.010 118); --ink-2:oklch(0.780 0.014 118); --ink-3:oklch(0.630 0.014 118);
+  --line:oklch(0.310 0.014 118); --line-2:oklch(0.385 0.016 118);
+  --accent:#A9BA3C; --accent-ink:#16200A; --accent-soft:#2A3410; --accent-deep:#C6D65C;
+  --lime:#C1E043; --lime-soft:#2E3A12; --lime-wash:#242E0F; --forest:#E9F2C2;
+  --focus:#A9BA3C;
+  --c1:#8B9A2C; --c2:#7A72F0; --c3:#C4831F; --c4:#E85A76;
+  --good:#8B9A2C; --warn:#C4831F; --serious:#D9743F; --critical:#E85A76;
+  --good-soft:#2B3512; --warn-soft:#3A2C0E; --serious-soft:#3A2513; --critical-soft:#3B1B23;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 22px rgba(0,0,0,.35);
+  --shadow-lift:0 16px 44px rgba(0,0,0,.55), 0 4px 12px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -67,12 +81,15 @@ hr{border:0; border-top:1px solid var(--line); margin:2rem 0}
 /* ---------- layout ---------- */
 .shell{display:grid; grid-template-columns:230px minmax(0,1fr); gap:2rem; max-width:1440px; margin:0 auto; padding:0 1.5rem 4rem}
 .rail{position:sticky; top:1rem; align-self:start; height:calc(100vh - 2rem); overflow:auto; padding:1rem 0 1rem .2rem}
-.rail nav a{display:block; padding:.42rem .6rem; margin:.1rem 0; border-radius:var(--radius-s); color:var(--ink-2); text-decoration:none; font-size:.92rem; border-left:2px solid transparent}
+.rail nav a{display:flex; align-items:center; gap:.5rem; padding:.5rem .7rem; margin:.15rem 0; border-radius:99px; color:var(--ink-2); text-decoration:none; font-size:.92rem; transition:background .2s var(--ease), color .2s var(--ease)}
+.rail nav a .tick{width:1.35rem; height:1.35rem; border-radius:50%; border:1.5px solid var(--line-2); display:grid; place-items:center; font-size:.72rem; flex:0 0 auto; font-family:var(--mono); color:var(--ink-3); transition:all .25s var(--ease)}
+.rail nav a .tick.done{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+.rail nav a .tick.part{border-color:var(--accent); color:var(--accent)}
 .rail nav a:hover{background:var(--surface-2); color:var(--ink)}
-.rail nav a.active{border-left-color:var(--accent); color:var(--ink); background:var(--surface-2); font-weight:600}
+.rail nav a.active{color:var(--ink); background:var(--accent-soft); font-weight:600}
 .rail .progress-mini{margin:1rem .6rem 0; font-size:.82rem; color:var(--ink-2)}
 .bar{height:8px; background:var(--surface-3); border-radius:99px; overflow:hidden; margin:.35rem 0}
-.bar > span{display:block; height:100%; background:var(--accent); border-radius:99px; transition:width .35s ease}
+.bar > span{display:block; height:100%; background:var(--accent); border-radius:99px; transition:width .45s var(--ease)}
 main{min-width:0}
 section{padding:2.4rem 0 .6rem; border-top:1px solid var(--line)}
 section:first-of-type{border-top:0}
@@ -89,6 +106,8 @@ section:first-of-type{border-top:0}
 .kpi .v{font-family:var(--display); font-size:2.1rem; font-weight:700; line-height:1; font-variant-numeric:tabular-nums}
 .kpi .l{font-size:.86rem; color:var(--ink-2); margin-top:.3rem; line-height:1.3}
 .kpi::before{content:""; position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--kpi-color,var(--accent))}
+.kpi{transition:transform .25s var(--ease), box-shadow .25s var(--ease)}
+.kpi:hover{transform:translateY(-2px); box-shadow:var(--shadow-lift)}
 .ring{--p:0; width:112px; height:112px; border-radius:50%; background:conic-gradient(var(--accent) calc(var(--p)*1%), var(--surface-3) 0); display:grid; place-items:center; flex:0 0 auto}
 .ring > div{width:84px; height:84px; border-radius:50%; background:var(--surface); display:grid; place-items:center; text-align:center; line-height:1.05}
 .ring .pct{font-family:var(--display); font-weight:700; font-size:1.5rem}
@@ -100,6 +119,7 @@ section:first-of-type{border-top:0}
 .chip{display:inline-flex; align-items:center; gap:.35rem; padding:.12rem .55rem; border-radius:99px; font-size:.78rem; font-weight:600; border:1px solid var(--line-2); background:var(--surface-2); color:var(--ink-2); white-space:nowrap; letter-spacing:.01em}
 .chip.state{font-family:var(--mono); font-weight:500; letter-spacing:.04em}
 .chip.retailer{background:var(--accent-soft); border-color:transparent; color:var(--accent-deep)}
+.chip.good{color:var(--ink)}
 .chip.good{background:var(--good-soft); border-color:transparent; color:var(--ink)}
 .chip.warn{background:var(--warn-soft); border-color:transparent; color:var(--ink)}
 .chip.serious{background:var(--serious-soft); border-color:transparent; color:var(--ink)}
@@ -124,7 +144,7 @@ tbody tr:hover{background:var(--surface-2)}
 td.num,th.num{text-align:right; font-variant-numeric:tabular-nums}
 
 /* ---------- outcome bar ---------- */
-.stack{display:flex; height:34px; border-radius:6px; overflow:hidden; gap:2px; background:var(--bg)}
+.stack{display:flex; height:36px; border-radius:10px; overflow:hidden; gap:2px; background:var(--bg)}
 .stack > div{display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-family:var(--display); font-size:.95rem; min-width:2.2rem; font-variant-numeric:tabular-nums}
 .legend{display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; margin-top:.7rem; font-size:.9rem}
 .legend span i{display:inline-block; width:.8rem; height:.8rem; border-radius:3px; margin-right:.45rem; vertical-align:-1px}
@@ -148,12 +168,28 @@ td.num,th.num{text-align:right; font-variant-numeric:tabular-nums}
 /* ---------- cards ---------- */
 .stategroup{margin:1.6rem 0 .6rem} .stategroup h3{display:flex; align-items:center; gap:.7rem; color:var(--ink-2); font-size:1rem; text-transform:uppercase; letter-spacing:.06em}
 .stategroup h3 .n{font-family:var(--body); font-weight:500; color:var(--ink-3); text-transform:none; letter-spacing:0}
-.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(420px,1fr)); gap:1rem}
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(400px,1fr)); gap:1rem; align-items:start}
 @media (max-width:520px){ .cards{grid-template-columns:1fr} }
-.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden; border-top:4px solid var(--line-2)}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden; border-top:4px solid var(--line-2); transition:box-shadow .25s var(--ease), transform .25s var(--ease), border-color .25s var(--ease)}
+.card:hover{box-shadow:var(--shadow-lift)}
+.card.s-done{background:linear-gradient(var(--lime-wash),var(--surface) 120px)}
+#cards .card .hd{cursor:pointer; user-select:none}
+#cards .card .hd:hover h4{color:var(--accent-deep)}
+#cards .card .hd .caret{color:var(--ink-3); font-size:.75rem; transition:transform .25s var(--ease); flex:0 0 auto; align-self:flex-start; margin-top:.35rem}
+#cards .card.open .hd .caret{transform:rotate(90deg)}
+#cards .card:not(.open) .body, #cards .card:not(.open) .months, #cards .card:not(.open) .note, #cards .card:not(.open) .notes{display:none}
+.peek{padding:.1rem 1rem .7rem; display:flex; gap:.6rem; align-items:baseline; flex-wrap:wrap; font-family:var(--mono); font-size:.82rem}
+#cards .card.open .peek{display:none}
+.peek .val{overflow-wrap:anywhere; min-width:0}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.22)}100%{transform:scale(1)}}
+.checks input:checked{animation:pop .3s var(--ease)}
+.card.just-done{animation:cheer .55s var(--ease)}
+@keyframes cheer{0%{transform:scale(1)}35%{transform:scale(1.015)}100%{transform:scale(1)}}
 .card.s-progress{border-top-color:var(--warn)} .card.s-done{border-top-color:var(--good)} .card.s-hold{border-top-color:var(--ink-3)}
-.card .hd{padding:.9rem 1rem .5rem; display:flex; justify-content:space-between; gap:.8rem; align-items:flex-start}
-.card .hd h4{font-family:var(--display); font-size:1.15rem; font-weight:700; line-height:1.15}
+.card .hd{padding:.9rem 1rem .5rem; display:flex; justify-content:space-between; gap:.5rem .8rem; align-items:flex-start; flex-wrap:wrap}
+.card .hd > div:not(.chips){flex:1 1 14rem; min-width:0}
+.card .chips{flex:0 1 auto; align-self:flex-start}
+.card .hd h4{font-family:var(--display); font-size:1.1rem; font-weight:700; line-height:1.2; overflow-wrap:anywhere}
 .card .hd .sub{font-size:.85rem; color:var(--ink-2); margin-top:.2rem}
 .card .chips{display:flex; gap:.35rem; flex-wrap:wrap; justify-content:flex-end}
 .card .body{padding:.3rem 1rem .6rem; display:grid; grid-template-columns:1fr 1fr; gap:.6rem 1rem}
@@ -161,13 +197,15 @@ td.num,th.num{text-align:right; font-variant-numeric:tabular-nums}
 .field{font-size:.86rem; min-width:0} .field .k{color:var(--ink-3); font-size:.74rem; text-transform:uppercase; letter-spacing:.06em} .field .v{font-family:var(--mono); font-size:.86rem; display:flex; flex-wrap:wrap; gap:.15rem .5rem; align-items:baseline} .field .val{overflow-wrap:anywhere; min-width:0}
 .copy{border:0; background:transparent; color:var(--accent-deep); cursor:pointer; font-size:.74rem; padding:0 .2rem; font-family:var(--body)} .copy:hover{text-decoration:underline}
 .months{display:flex; gap:.4rem; flex-wrap:wrap; padding:.2rem 1rem .5rem}
-.month{display:inline-flex; align-items:center; gap:.4rem; border:1px solid var(--line); border-radius:var(--radius-s); padding:.25rem .55rem; font-size:.8rem; background:var(--bg)}
+.month{display:inline-flex; align-items:center; gap:.4rem; border:1px solid var(--line); border-radius:99px; padding:.25rem .6rem; font-size:.8rem; background:var(--bg)}
 .month .kwh{font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--ink)}
-.note{margin:0 1rem .6rem; padding:.55rem .7rem; border-radius:var(--radius-s); font-size:.85rem; background:var(--surface-2)}
+.note{margin:0 1rem .6rem; padding:.6rem .75rem; border-radius:var(--radius-s); font-size:.85rem; background:var(--surface-2)}
 .note.warn{background:var(--warn-soft)} .note.hist{background:var(--surface-2); border-left:3px solid var(--c2)}
-.checks{display:grid; grid-template-columns:repeat(3,1fr); gap:.4rem; padding:.6rem 1rem .2rem; border-top:1px solid var(--line); margin-top:auto; background:var(--surface-2)}
+.checks{display:grid; grid-template-columns:repeat(3,1fr); gap:.4rem; padding:.6rem 1rem .5rem; border-top:1px solid var(--line); margin-top:auto; background:var(--surface-2)}
 .checks label{display:flex; gap:.45rem; align-items:flex-start; font-size:.84rem; cursor:pointer; padding:.35rem .4rem; border-radius:var(--radius-s)}
 .checks label:hover{background:var(--surface)}
+.checks input{accent-color:var(--accent); cursor:pointer}
+.checks label:has(input:checked){color:var(--ink-2)} .checks label:has(input:checked) span{text-decoration:none}
 .checks input{width:1.05rem; height:1.05rem; margin-top:.1rem; accent-color:var(--accent); flex:0 0 auto}
 .checks .when{display:block; font-size:.72rem; color:var(--ink-3)}
 .checks.two{grid-template-columns:repeat(2,1fr)}
@@ -187,7 +225,7 @@ details > summary:hover{background:var(--surface-2)}
 #parkedTable tr.reviewed{opacity:.55}
 .checks label .hint{display:block; font-size:.74rem; color:var(--ink-3); font-weight:400; font-family:var(--body)}
 .sidebyside{display:grid; grid-template-columns:1fr 1fr; gap:.6rem; padding:.2rem 1rem .6rem}
-.lane{border:1px solid var(--line); border-radius:var(--radius-s); padding:.5rem .6rem; background:var(--bg); min-width:0}
+.lane{border:1px solid var(--line); border-radius:var(--radius-s); padding:.6rem .7rem; background:var(--bg); min-width:0}
 .lane.close{border-left:3px solid var(--critical)} .lane.keep{border-left:3px solid var(--good)}
 .lane .lbl{font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-3); display:block; margin-bottom:.2rem}
 .lane .acctrow{display:flex; gap:.4rem; align-items:baseline; justify-content:space-between}
@@ -200,7 +238,17 @@ details > summary:hover{background:var(--surface-2)}
 @media (max-width:640px){ .sidebyside{grid-template-columns:1fr} .checks.two{grid-template-columns:1fr} }
 .notes{padding:.4rem 1rem .9rem; background:var(--surface-2)}
 .notes textarea{width:100%; min-height:38px; resize:vertical; border:1px solid var(--line-2); border-radius:var(--radius-s); padding:.4rem .6rem; font:inherit; font-size:.85rem; background:var(--surface); color:var(--ink)}
-.empty{padding:2rem; text-align:center; color:var(--ink-3); border:1px dashed var(--line-2); border-radius:var(--radius)}
+.empty{padding:2.4rem; text-align:center; color:var(--ink-2); border:1.5px dashed var(--line-2); border-radius:var(--radius); background:var(--surface)}
+.empty .big{font-size:1.6rem; display:block; margin-bottom:.4rem}
+.nextup{display:flex; align-items:center; gap:.8rem; flex-wrap:wrap; background:var(--accent-soft); border:1px solid transparent; border-radius:99px; padding:.5rem .5rem .5rem 1.1rem; margin:0 0 1rem; font-size:.92rem}
+.nextup b{font-family:var(--display)}
+.nextup .btn{margin-left:auto}
+.alldone{background:var(--lime-wash); border:1px solid var(--accent); border-radius:var(--radius); padding:1.1rem 1.3rem; margin-bottom:1rem; display:flex; gap:.9rem; align-items:center}
+.alldone .big{font-size:1.7rem}
+.kbd{font-family:var(--mono); font-size:.72rem; border:1px solid var(--line-2); border-bottom-width:2px; border-radius:6px; padding:.05rem .3rem; background:var(--surface); color:var(--ink-2)}
+.btn{border-radius:99px; transition:transform .2s var(--ease), box-shadow .2s var(--ease)}
+.btn:hover{transform:translateY(-1px)}
+.stack > div{transition:flex .4s var(--ease)}
 
 /* ---------- LGC table rows ---------- */
 tr.reviewed td{color:var(--ink-3)} tr.reviewed td:first-child{color:var(--ink)}
@@ -235,7 +283,8 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 <div class="shell">
 <aside class="rail">
   <nav id="nav" aria-label="Sections"></nav>
-  <div class="progress-mini"><div>Set-up progress</div><div class="bar"><span id="miniBar" style="width:0%"></span></div><div id="miniText"></div></div>
+  <div class="progress-mini"><div>Section 2 progress</div><div class="bar"><span id="miniBar" style="width:0%"></span></div><div id="miniText"></div>
+    <div class="small faint" style="margin-top:.6rem"><span class="kbd">/</span> search · <span class="kbd">n</span> next up · <span class="kbd">esc</span> clear</div></div>
   <div class="progress-mini" style="margin-top:.6rem"><button class="btn small" id="btnExport">Save progress…</button> <button class="btn small" id="btnPrint">Print</button></div>
 </aside>
 
@@ -258,8 +307,9 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
   <div class="section-head"><h2>2 &middot; Make these virtual accounts</h2><span class="count" id="checklistCount"></span></div>
   <div class="callout crit"><h3>Fix the NSW LGC factor before linking</h3><p>The two live accounts use <b>LGCs NSW 24-25</b> at &minus;0.66 kg/kWh against electricity on <b>25-26 New South Wales</b> at 0.64, so a 100% meter over-offsets by ~3% and the site goes <em>negative</em>. Victoria has an <em>LGCs Victoria 25-26</em>; NSW needs its 25-26 equivalent added or mapped.</p></div>
   <div class="callout"><h3>Two rules that decide everything else</h3><p><b>Create it empty.</b> Envizi only allows a virtual meter on an account holding no records, so each one is made by hand and the PM&amp;C load tab is never uploaded &mdash; it stays as the record of what each account should look like.</p><p><b>Opened On = <span class="mono">2026-07-01</span>.</b> That is what stops the meter reaching back before the renewal. <span data-n="hist"></span> of the <span data-n="create"></span> sources hold earlier data.</p></div>
+  <div class="nextup" id="nextUp"></div>
   <div class="controls">
-    <input id="q" type="search" placeholder="Search location, site, NMI, account…" aria-label="Search">
+    <input id="q" type="search" placeholder="Search location, site, NMI, account…   (press /)" aria-label="Search">
     <select id="fState" aria-label="State"><option value="">State: all</option></select>
     <select id="fRetailer" aria-label="Retailer"><option value="">Retailer: all</option></select>
     <select id="fStatus" aria-label="Status"><option value="">Status: all</option><option value="todo">Not started</option><option value="progress">In progress</option><option value="done">Verified</option></select>
@@ -371,6 +421,7 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const fmt=n=>Number(n||0).toLocaleString("en-AU");
 const rows=DATA.rows, creates=rows.filter(r=>r.decision===D_CREATE);
 const rowState=r=>state[r.nmi]||{};
+const OPEN=new Set();          // which cards are expanded, this visit only
 const cardStatus=r=>{ const s=rowState(r); if(s.verified||LIVE.has(r.new_acct)) return "done"; if(s.created||s.linked) return "progress"; return "todo" };
 
 /* ---- masthead ---- */
@@ -379,17 +430,32 @@ const cardStatus=r=>{ const s=rowState(r); if(s.verified||LIVE.has(r.new_acct)) 
   const alinta=rows.filter(r=>r.decision===D_GREEN).length, named=rows.filter(r=>r.decision===D_NAMED).length, hist=creates.filter(r=>r.src_history==="Yes").length;
   const small=creates.filter(r=>r.src_small).length, live=creates.filter(r=>LIVE.has(r.new_acct)).length, todo=creates.length-live;
   const wait=(DATA.waiting||[]), parked=wait.filter(w=>w.parked).length;
-  const k=[[(DATA.dual||[]).length,"1 · accounts to close","var(--c2)"],[todo,"2 · virtual accounts still to make","var(--c1)"],[wait.length,"3 · waiting on the retailer's account","var(--c4)"],[live,"already live and verified","var(--good)"],[parked,"of the waiting sites just need the account allocated","var(--c4)"],[DATA.lgcs.length,"historical LGCS_ accounts to leave alone","var(--c3)"],[alinta+named,"already renewable, or excluded by name","var(--ink-3)"],["81","register rows reviewed","var(--ink-3)"]];
+  const k=[[(DATA.dual||[]).length,"1 · accounts to close","var(--c4)"],[todo,"2 · virtual accounts still to make","var(--c1)"],[wait.length,"3 · on hold, waiting on the retailer","var(--c3)"],[parked,"of those just need the account allocated","var(--c3)"],[live,"already live and verified","var(--good)"],[DATA.lgcs.length,"historical LGCS_ accounts to leave alone","var(--c2)"],[alinta+named,"already renewable, or excluded by name","var(--ink-3)"],["81","register rows reviewed","var(--ink-3)"]];
   document.querySelectorAll('[data-n]').forEach(el=>{ el.textContent={create:creates.length,noprior:noPrior,prior:withPrior,lgcs:DATA.lgcs.length,alinta,named,hist,small,live,todo,dual:(DATA.dual||[]).length,wait:wait.length,parked}[el.dataset.n] });
   $("#kpis").innerHTML=k.map(([v,l,c])=>`<div class="kpi" style="--kpi-color:${c}"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
   $("#footBuilt").textContent=`Built ${DATA.built} from the ${DATA.extract_date} accounts extract, the 26 Aug 26 locations extract, and the Jun–Aug 26 Envizi export taken ${DATA.verify_date} after the first two accounts were made.`;
 })();
+function sectionTicks(){
+  const dual=DATA.dual||[], wait=(DATA.waiting||[]).filter(w=>w.parked);
+  [["close",dual.filter(dualDone).length,dual.length],
+   ["make",creates.filter(r=>cardStatus(r)==="done").length,creates.length],
+   ["waiting",wait.filter(w=>(state["park:"+w.nmi]||{}).done).length,wait.length],
+   ["other",0,0]].forEach(([id,done,total])=>{
+    const el=document.querySelector(`.tick[data-sec="${id}"]`); if(!el) return;
+    if(!total){ el.textContent="\u00B7"; return }
+    const all=done===total;
+    el.textContent=all?"\u2713":String(done);
+    el.className="tick"+(all?" done":done?" part":"");
+    el.title=`${done} of ${total} done`;
+  });
+}
 function updateProgress(){
   const total=creates.length, done=creates.filter(r=>cardStatus(r)==="done").length, prog=creates.filter(r=>cardStatus(r)==="progress").length;
   const pct=total?Math.round(done/total*100):0;
   $("#ring").style.setProperty("--p",pct); $("#ringPct").textContent=pct+"%";
   $("#ringStat").innerHTML=`<b>${done}</b> of <b>${total}</b> verified<br><b>${prog}</b> in progress<br><b>${total-done-prog}</b> not started`;
   $("#miniBar").style.width=pct+"%"; $("#miniText").textContent=`${done} verified · ${prog} in progress · ${total-done-prog} to go`;
+  sectionTicks();
   const dd=(DATA.dual||[]).filter(dualDone).length; $("#dualCount").textContent=`${dd} of ${(DATA.dual||[]).length} closed off`;
 }
 
@@ -405,7 +471,7 @@ function updateProgress(){
 /* ---- nav ---- */
 (function nav(){
   const secs=[...document.querySelectorAll("main section")];
-  $("#nav").innerHTML=secs.map(s=>`<a href="#${s.id}">${esc(s.querySelector("h2").textContent)}</a>`).join("");
+  $("#nav").innerHTML=secs.map(s=>`<a href="#${s.id}"><span class="tick" data-sec="${s.id}"></span><span>${esc(s.querySelector("h2").textContent)}</span></a>`).join("");
   const links=[...$("#nav").querySelectorAll("a")];
   const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ links.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+e.target.id)) } }) },{rootMargin:"-30% 0px -60% 0px"});
   secs.forEach(s=>io.observe(s));
@@ -423,9 +489,11 @@ function card(r){
   const liveChip=isLive?`<span class="chip good" title="Confirmed in the ${esc(DATA.verify_date)} export"><span class="dot good"></span>live</span>`:"";
   const dual=r.other_on_nmi?`<div class="note warn"><b>Another account is still recording on this NMI:</b> <span class="mono">${esc(r.other_on_nmi)}</span> — a double count, and not the meter's source. Close it off from <a href="#dual">the double count list</a>.</div>`:"";
   const all=[["Location",r.location],["Location ref",r.lref],["Account style","Certificates - Location - kWh"],["Account number",r.new_acct],["Account reference",r.nmi],["Supplier",r.new_sup],["Reader","(blank)"],["Opened On",r.opened_on],["Virtual meter source",r.src_acct+" at 100%"]].map(([k,v])=>`${k}: ${v}`).join("\n");
-  return `<article class="card s-${st}" data-nmi="${esc(r.nmi)}">
-    <div class="hd"><div><h4>${esc(r.location)}</h4><div class="sub">${esc(r.site||"")}${r.site?" · ":""}${esc(r.address||"")}</div></div>
+  const open=OPEN.has(r.nmi);
+  return `<article class="card s-${st}${open?" open":""}" data-nmi="${esc(r.nmi)}">
+    <div class="hd" role="button" tabindex="0" aria-expanded="${open}"><span class="caret">&#9654;</span><div style="flex:1;min-width:0"><h4>${esc(r.location)}</h4><div class="sub">${esc(r.site||"")}${r.site?" · ":""}${esc(r.address||"")}</div></div>
       <div class="chips">${liveChip}${r.src_small?`<span class="chip warn" title="Envizi styles the source Electricity Small Market. That is the meter class; the site is supplied as large market, so it stays in scope."><span class="dot warn"></span>small-market meter</span>`:""}<span class="chip state">${esc(r.state)}</span><span class="chip retailer">${esc(r.retailer)}</span></div></div>
+    <div class="peek"><span class="val">${esc(r.new_acct)}</span><button class="copy" data-copy="${esc(all)}">copy all fields</button></div>
     <div class="body">
       <div class="field"><div class="k">New account number</div><div class="v"><span class="val">${esc(r.new_acct)}</span><button class="copy" data-copy="${esc(r.new_acct)}">copy</button></div></div>
       <div class="field"><div class="k">Source account (virtual meter)</div><div class="v"><span class="val">${esc(r.src_acct)}</span><button class="copy" data-copy="${esc(r.src_acct)}">copy</button></div></div>
@@ -447,21 +515,52 @@ function card(r){
     <div class="notes"><textarea placeholder="Notes for this site…" aria-label="Notes">${esc(s.notes||"")}</textarea></div>
   </article>`;
 }
+function nextUp(){ return creates.find(r=>cardStatus(r)!=="done") }
+function goToNext(){
+  const r=nextUp(); if(!r) return;
+  OPEN.add(r.nmi); renderCards();
+  const el=document.querySelector(`#cards .card[data-nmi="${CSS.escape(r.nmi)}"]`);
+  if(el){ el.scrollIntoView({behavior:"smooth",block:"center"}); el.classList.add("just-done"); setTimeout(()=>el.classList.remove("just-done"),600); }
+}
+function renderNextUp(){
+  const left=creates.filter(r=>cardStatus(r)!=="done").length, r=nextUp();
+  $("#nextUp").innerHTML = r
+    ? `<span>Next up: <b>${esc(r.location)}</b></span><span class="faint small">${left} left</span><button class="btn primary" id="btnNext">Take me there</button>`
+    : `<span>&#127881; <b>All ${creates.length} made and verified.</b></span><span class="faint small">Nothing left in this section.</span>`;
+  const b=$("#btnNext"); if(b) b.addEventListener("click",goToNext);
+}
 function renderCards(){
   const q=$("#q").value.trim().toLowerCase(), fs=$("#fState").value, fr=$("#fRetailer").value, fh=$("#fHist").value, fp=$("#fPrior").value, fst=$("#fStatus").value;
   const fd=$("#fDual").value;
   const list=creates.filter(r=>(!fs||r.state===fs)&&(!fr||r.retailer===fr)&&(!fh||r.src_history===fh)&&(!fp||(fp==="yes"?r.certs_n>0:r.certs_n===0))&&(!fst||cardStatus(r)===fst)&&(!fd||(fd==="dual"?!!r.other_on_nmi:!!r.src_small))
     &&(!q||[r.location,r.site,r.address,r.nmi,r.account,r.src_acct,r.new_acct,r.certs].join(" ").toLowerCase().includes(q)));
   $("#checklistCount").textContent=list.length===creates.length?`${creates.length} to make`:`${list.length} of ${creates.length} shown`;
-  if(!list.length){ $("#cards").innerHTML=`<div class="empty">Nothing matches those filters.</div>`; return }
+  if(!list.length){ $("#cards").innerHTML=`<div class="empty"><span class="big">&#128269;</span>Nothing matches those filters. <button class="btn" onclick="document.getElementById('btnClear').click()">Clear them</button></div>`; renderNextUp(); return }
   const order=["NSW","ACT","QLD","VIC","SA","TAS","WA","NT"]; const groups={};
   list.forEach(r=>(groups[r.state]=groups[r.state]||[]).push(r));
-  $("#cards").innerHTML=order.filter(s=>groups[s]).map(s=>`<div class="stategroup"><h3>${esc(STATE_NAMES[s]||s)} <span class="n">${groups[s].length} account${groups[s].length>1?"s":""}</span></h3><div class="cards">${groups[s].sort((a,b)=>a.location.localeCompare(b.location)).map(card).join("")}</div></div>`).join("");
+  $("#cards").innerHTML=order.filter(s=>groups[s]).map(s=>{
+    const done=groups[s].filter(r=>cardStatus(r)==="done").length;
+    return `<div class="stategroup"><h3>${esc(STATE_NAMES[s]||s)} <span class="n">${done===groups[s].length?"&#10003; all done":`${done} of ${groups[s].length} done`}</span></h3><div class="cards">${groups[s].sort((a,b)=>a.location.localeCompare(b.location)).map(card).join("")}</div></div>` }).join("");
+  renderNextUp();
 }
+$("#cards").addEventListener("click",e=>{
+  const hd=e.target.closest(".hd"); if(!hd||e.target.closest("button")) return;
+  const art=hd.closest(".card"), n=art.dataset.nmi;
+  OPEN.has(n)?OPEN.delete(n):OPEN.add(n);
+  art.classList.toggle("open"); hd.setAttribute("aria-expanded",OPEN.has(n));
+});
+$("#cards").addEventListener("keydown",e=>{
+  if(!e.target.classList.contains("hd")||(e.key!==" "&&e.key!=="Enter")) return;
+  e.preventDefault(); e.target.click();
+});
 $("#cards").addEventListener("change",e=>{
   const art=e.target.closest(".card"); if(!art) return; const nmi=art.dataset.nmi; state[nmi]=state[nmi]||{};
+  const was=cardStatus(rows.find(r=>r.nmi===nmi)||{nmi});
   if(e.target.matches("input[type=checkbox]")){ const k=e.target.dataset.k; state[nmi][k]=e.target.checked; state[nmi][k+"_at"]=e.target.checked?new Date().toLocaleDateString("en-AU",{day:"2-digit",month:"short",year:"numeric"}):null; if(k==="verified"&&e.target.checked){ state[nmi].created=true; state[nmi].linked=true; } }
   save(); renderCards(); updateProgress();
+  const now=cardStatus(rows.find(r=>r.nmi===nmi)||{nmi});
+  if(was!=="done"&&now==="done"){ const el=document.querySelector(`#cards .card[data-nmi="${CSS.escape(nmi)}"]`);
+    if(el){ el.classList.add("just-done"); setTimeout(()=>el.classList.remove("just-done"),600) } toast("Nice — that one's done"); }
 });
 $("#cards").addEventListener("input",e=>{ if(e.target.matches("textarea")){ const nmi=e.target.closest(".card").dataset.nmi; state[nmi]=state[nmi]||{}; state[nmi].notes=e.target.value; save(); } });
 document.addEventListener("click",e=>{ const b=e.target.closest(".copy,.copyall"); if(!b) return; const v=b.dataset.copy;
@@ -578,6 +677,12 @@ $("#dlgClose").addEventListener("click",()=>$("#dlg").close());
 $("#btnPrint").addEventListener("click",()=>window.print());
 $("#btnReset").addEventListener("click",()=>{ if(confirm("Clear every tick and note on this page?")){ state={}; save(); renderCards(); renderDual(); renderWait(); updateProgress(); document.querySelectorAll("#lgcsTable tbody tr").forEach(tr=>{ tr.querySelector("input").checked=false; tr.classList.remove("reviewed") }); toast("Progress cleared") } });
 
+document.addEventListener("keydown",e=>{
+  const typing=/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
+  if(e.key==="/"&&!typing){ e.preventDefault(); $("#q").focus(); $("#q").select(); }
+  else if(e.key==="n"&&!typing){ e.preventDefault(); goToNext(); }
+  else if(e.key==="Escape"){ if(typing) e.target.blur(); $("#btnClear").click(); }
+});
 renderCards(); renderDual(); renderWait(); updateProgress();
 </script>
 </body>

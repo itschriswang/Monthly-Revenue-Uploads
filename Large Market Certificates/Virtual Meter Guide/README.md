@@ -13,6 +13,11 @@ four sections in the order I work them:
 **Open it by double-clicking the file** (it is self-contained; no server needed). Ticks and notes are
 saved in that browser — use *Save progress…* to copy them to another device or browser.
 
+Section 2's cards are collapsed to a line each; click a header to open one. A **Next up** bar points at
+the first account still to do, the rail shows how far through each section I am, and the keyboard has
+<kbd>/</kbd> to search, <kbd>n</kbd> to jump to the next account and <kbd>esc</kbd> to clear the filters.
+Type and colour follow the Portfolio repo — Space Grotesk, Inter, JetBrains Mono, and its matcha palette.
+
 It is generated from the review workbook one folder up
 (`Account_Setup_and_Data_Load_-_PM&C_LMCERTSJUL26_Setup.xlsx`) and the Jun–Aug 26 Envizi data, so the
 numbers on the page and in the workbook agree. Built 04 Sep 2026 from the 03 Sep 2026 accounts extract.
