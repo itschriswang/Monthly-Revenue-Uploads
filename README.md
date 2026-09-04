@@ -52,7 +52,9 @@ new ones have appeared since and are listed with a proposed location each.
 
 The FY26–28 renewal agreement sites are matched by NMI to their Envizi accounts, checked for an existing
 offset (an `LGCS_` certificate account at the location, or green kWh already recorded on the account's
-own green component), and a `Certificates - Location - kWh` virtual account is set up for each large
-market account that has neither — modelled on the Ecotricity `_CERTS` accounts. The upload and the
-review behind it live in **`Large Market Certificates/`** — see
+own green component), and a `Certificates - Location - kWh` virtual account is set up as a virtual meter
+of each large market account — modelled on the Ecotricity `_CERTS` accounts. The existing `LGCS_`
+accounts hold 2025-and-earlier data, so they stay as history and the new accounts sit beside them. The
+working guide is **`Large Market Certificates/Virtual Meter Guide/Large_Market_Virtual_Meters.html`**;
+the review workbook and write-up are in **`Large Market Certificates/`** — see
 [`Large Market Certificates/README.md`](Large%20Market%20Certificates/README.md).
