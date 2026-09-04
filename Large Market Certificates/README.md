@@ -8,7 +8,7 @@ FY26–28 renewal agreements, and everything behind them.
 | File | What it is |
 | --- | --- |
 | `Virtual Meter Guide/Large_Market_Virtual_Meters.html` | **Start here.** Four sections in the order I work them: **1** accounts to close, **2** virtual accounts to make, **3** sites on hold because the contracted retailer has no account yet, **4** everything with no action. Ticks and notes save in the browser. Open it by double-clicking. |
-| `Account_Setup_and_Data_Load_-_PM&C_LMCERTSJUL26_Setup.xlsx` | The review workbook: all 81 register rows with live formulas, the 56 accounts on `Prep` and the load tab (kept as the record of what each account looks like — **not uploaded**, see below), plus the `Manual Setup Checklist` and `LGCS Accounts to Check` tabs. The `Account_Setup_and_Data_Load_-_PM&C_` prefix is what Envizi processes on if a load is ever needed. |
+| `Account_Setup_and_Data_Load_-_PM&C_LMCERTSJUL26_Setup.xlsx` | The review workbook: all 81 register rows with live formulas, the 70 accounts on `Prep` and the load tab (kept as the record of what each account looks like — **not uploaded**, see below), plus the `Manual Setup Checklist` and `LGCS Accounts to Check` tabs. The `Account_Setup_and_Data_Load_-_PM&C_` prefix is what Envizi processes on if a load is ever needed. |
 | `Downer_Energy_Contracting_and_Budget_Summary_FY26-28.xlsx` | The renewal agreement site register (scope, retailers, contract dates) and the rate schedules with the LGC lines. |
 | `Downer_Energy_Contracting_and_Budget_Summary_FY26-28_with_Envizi_accounts.xlsx` | The same workbook with the Envizi account mapping added to `Site Register` as columns V–AE, and an `Envizi mapping notes` tab explaining them. Everything left of column V is untouched. |
 | `ElectricityEnviziSummaryjunejulyaug26.xlsx` | The Jun–Aug 26 Envizi summary — kWh, actual/accrued split, cost, CO2e and the green component. |
@@ -21,7 +21,8 @@ The accounts and locations extracts it reads are in `../FY27/` (`Extract_for_Acc
 
 The **green rows** in the Site Register are the renewable ones — 78 of the 81 `AU Large Electricity`
 rows, the other three being the NT sites on Jacana standing offer. A green row gets a virtual meter
-unless it is a named exclusion, already offset another way, or on hold below.
+unless it is a named exclusion or already offset another way. 70 accounts get built in all: 56 permanent
+and 14 temporary (section 3).
 
 **The meter class does not decide scope.** Category Management, 4 Sep 26, on a Mogo NMI I queried:
 
@@ -36,7 +37,7 @@ sit on a small-market-styled source for this reason.
 | Outcome | Rows |
 | --- | --- |
 | **Create — virtual certificate account** | **56** |
-| On hold — the contracted retailer has no account on the NMI yet | 14 |
+| Create — temporary, the contracted retailer has no account on the NMI yet | 14 |
 | Exclude — already renewable via the account's green component (Alinta WA) | 7 |
 | Exclude — named site (NT ×3, QTMP) | 4 |
 | Total register rows reviewed | 81 |
@@ -91,7 +92,7 @@ Modelled on the Ecotricity virtual accounts (`Copy of Eco_ICP_..._CERTS`) and on
 | Records | **none** — the account must be empty to become a virtual meter |
 | Virtual meter source | The account on the card, 100% |
 
-36 of the 56 sources have data before 1 Jul 26, which is why Opened On matters: without it the meter
+50 of the 70 sources have data before 1 Jul 26, which is why Opened On matters: without it the meter
 mirrors those years too, generating certificates for periods that were not renewable and doubling what
 the old `LGCS_` accounts already record for 2025.
 
@@ -107,7 +108,7 @@ account shows kWh equal to the source and the location's market-based CO2e drops
 
 ## The existing `LGCS_` accounts — leave them
 
-43 active certificate accounts sit at 32 of the in-scope locations. Checked in Envizi on 4 Sep 26: all
+54 active certificate accounts sit at 40 of the in-scope locations. Checked in Envizi on 4 Sep 26: all
 hold LGC data from **2025 and earlier**, so none is empty, none can be converted to a virtual meter, and
 none covers the renewal period. They stay as the historical record and the new account sits beside them.
 The `LGCS Accounts to Check` tab lists them with `Has data?` pre-set to Yes; set one to No and the Action
@@ -133,14 +134,21 @@ its `5000021_` siblings have already been closed off at 31 Mar, 31 May and 30 Ju
 missed. Worth 201,069 kWh / 135 tCO₂e. I confirm the date against how the siblings were done rather than
 assuming 30 Jun.
 
-## Section 3 — 14 sites on hold, no account from the contracted retailer
+## Section 3 — 14 temporary accounts, to be remade later
 
-These are contracted to a retailer that has no account on the NMI in Envizi, so they are still recording
-against the old supply. **No virtual meter is built for them yet** — it would mirror the wrong account
-and read as renewable when it is not. They are held out of the create list until the account appears.
+These sites are contracted to a retailer that has no account on the NMI in Envizi yet, so they are still
+recording against the old supply. On the Director's call we build the certificate accounts anyway, so
+the renewable claim is in the numbers from July — but every one of them is **temporary**.
 
-**The account exists but sits in Unallocated Accounts (4).** Allocate each to its location and it moves
-into the create list on the next extract:
+**Why they get deleted rather than repointed.** The account name keys off its source, so
+`1003072_3051770385_CERTS` is only right while the meter follows `1003072_3051770385`. When the
+contracted retailer's account appears the source changes and the name no longer matches it, so the
+account is deleted and remade against the new one. The guide page carries a **delete register** listing
+each temporary account, what it follows today and what it is waiting on, with a tick per row.
+
+**Four can skip the rework.** On these NMIs the contracted retailer's account already exists — it is just
+sitting in `Unallocated Accounts` instead of at the site. Allocate it first and the certificate account
+can be built against the right source straight away, with nothing to delete later:
 
 | Location | NMI | Account to allocate | Supplier |
 | --- | --- | --- | --- |
@@ -149,9 +157,13 @@ into the create list on the next extract:
 | Maryborough | `QGGG000010` | `900018200_QGGG000010` | EngieAU |
 | Asphalt Prod - Mowbray (360) | `8000326927` | `DEDI01_088_8000326927` | ShellEnergyAU |
 
-**No account at all (10).** Every remaining Queensland site contracted to Engie is still on its CS Energy
-account — the connector has not switched them. Nothing to do until it does. Gympie and Archerfield are
-also in section 1, where their duplicate CS Energy account needs closing regardless.
+The other ten are Queensland sites contracted to Engie with no Engie account at all — the connector has
+not switched them. Gympie and Archerfield are also in section 1, where their duplicate CS Energy account
+needs closing regardless.
+
+In the workbook these rows carry the decision `Create - temporary, retailer's account not in Envizi yet`.
+They are shaded amber on the Review tab and they are on the load tab and `Manual Setup Checklist` with
+the other 56, because they are being built.
 
 ## The site register, mapped to Envizi
 
@@ -167,11 +179,11 @@ Connection ID resolves to:
 | AB | Account Status — Active or Replaced *date* |
 | AC | Match Basis |
 | AD | Other Envizi accounts on the same ID |
-| AE | Certificate / virtual meter account — the new one (live, or still to create), `on hold` where the contracted retailer has no account on that ID yet, and any historical `LGCS_` at the location |
+| AE | Certificate / virtual meter account — the new one (live, still to create, or `TEMPORARY` where it will have to be remade against the contracted retailer's account), and any historical `LGCS_` at the location |
 
 Shading: red in V–AE where no Envizi account ends in that Connection ID, amber in AB for a closed
 account, peach in AD for an ID that is being double counted, green in AE where the certificate account is
-already live and amber in AE where the site is on hold. The `Envizi mapping notes` tab carries the same explanation and the double-count list.
+already live and amber in AE where the account is temporary. The `Envizi mapping notes` tab carries the same explanation and the double-count list.
 
 **283 of 341 rows matched.** The 58 that did not are 48 NZ electricity ICPs and 10 NZ gas rows — NZ
 per-ICP accounts were replaced in 2023 by one account per location.
@@ -194,6 +206,7 @@ contract has not started, and for a site whose consumption sits on a per-locatio
 
 - The NSW 25-26 LGC emission factor — settle before linking the rest.
 - Section 1: close the 13 old accounts, and confirm the date for the two CS Energy ones.
-- Section 3: allocate the 4 parked accounts; chase the 10 Queensland sites still on CS Energy.
+- Section 3: allocate the 4 parked accounts before building those; chase the 10 Queensland sites still
+  on CS Energy, then delete and remake all 14 temporary accounts against the right source.
 - NZ, once the Ecotricity switch is confirmed.
 - The Envizi Account Style Link for the certificates style, only if the load tab is ever uploaded.

@@ -5,9 +5,12 @@ meters at the AU electricity sites under the FY26–28 renewal agreements — th
 four sections in the order I work them:
 
 1. **Close these accounts** — 13 NMIs where a second account is still recording the same months.
-2. **Make these virtual accounts** — 56, each with the values to key in and the source account to link.
-3. **No account from the contracted retailer yet** — 14 sites held back, because a meter built now would
-   mirror the old supply. Four of them just need an account allocated out of Unallocated Accounts.
+2. **Make these virtual accounts** — 56 permanent ones, each with the values to key in and the source account to link.
+3. **Make these, then come back** — 14 temporary accounts on sites whose contracted retailer has no
+   account in Envizi yet. They get built against the account recording today, so the renewable claim is
+   in the numbers, and a **delete register** at the bottom of the section tracks each one for deletion
+   and remaking later. Four just need an account allocated out of Unallocated Accounts first, which
+   avoids the rework entirely.
 4. **Other** — collapsed; scope, exclusions, the historical `LGCS_` accounts, NZ and the field reference.
 
 **Open it by double-clicking the file** (it is self-contained; no server needed). Ticks and notes are
