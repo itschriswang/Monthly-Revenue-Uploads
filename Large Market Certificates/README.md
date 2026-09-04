@@ -10,6 +10,7 @@ FY26–28 renewal agreements, and everything behind them.
 | `Virtual Meter Guide/Large_Market_Virtual_Meters.html` | **Start here.** The whole brief and the working checklist in one page — background, evidence, the two live accounts checked against the latest export, every account still to create with copyable field values, the historical `LGCS_` accounts to leave alone, exclusions, NZ and reference. Ticks and notes save in the browser. Open it by double-clicking. |
 | `Account_Setup_and_Data_Load_-_PM&C_LMCERTSJUL26_Setup.xlsx` | The review workbook: all 81 register rows with live formulas, the 45 accounts on `Prep` and the load tab (kept as the record of what each account looks like — **not uploaded**, see below), plus the `Manual Setup Checklist` and `LGCS Accounts to Check` tabs. The `Account_Setup_and_Data_Load_-_PM&C_` prefix is what Envizi processes on if a load is ever needed. |
 | `Downer_Energy_Contracting_and_Budget_Summary_FY26-28.xlsx` | The renewal agreement site register (scope, retailers, contract dates) and the rate schedules with the LGC lines. |
+| `Downer_Energy_Contracting_and_Budget_Summary_FY26-28_with_Envizi_accounts.xlsx` | The same workbook with the Envizi account mapping added to `Site Register` as columns V–AE. Everything left of column V is untouched. |
 | `ElectricityEnviziSummaryjunejulyaug26.xlsx` | The Jun–Aug 26 Envizi summary — kWh, actual/accrued split, cost, CO2e and the green component. |
 
 The accounts and locations extracts it reads are in `../FY27/` (`Extract_for_Accounts 03 Sep 26.csv`,
@@ -191,6 +192,34 @@ the guide page.
 | RPQ Swanbank | RPQ SPRAYSEAL | QLD | `3120070486` |
 | Richlands | Engineering - Archerfield | QLD | `3116600011` |
 | Teneriffe - Brisbane (QLD) | Corporate Office - Brisbane | QLD | `3117134943` |
+
+## The site register, mapped to Envizi
+
+`Downer_Energy_Contracting_and_Budget_Summary_FY26-28_with_Envizi_accounts.xlsx` adds ten columns to
+`Site Register` — the same 341 rows, all commodities and both countries, with the Envizi account each
+Connection ID resolves to:
+
+| Col | Contents |
+| --- | --- |
+| V | **Envizi Account Number** — the best match, or `Not found` |
+| W–Y | Account Style, Data Type, Supplier |
+| Z–AA | Location, Location Ref |
+| AB | Account Status — Active, Replaced *date*, or At Unallocated Accounts |
+| AC | Match Basis |
+| AD | Other Envizi accounts on the same ID |
+| AE | Certificate / virtual meter account — existing, and the planned one where this review creates it |
+
+Matching is on the Connection ID: first as the segment after the last underscore in the Envizi account
+number (283 rows), then anywhere in the account number, reference, reader, serial or location account ref
+(1 row). Where an ID carries several accounts, the active one of the right data type is shown and the
+rest are listed in col AD. Rows with no match are shaded, and a non-active status is shaded amber.
+
+**285 of 341 rows matched.** The 57 that did not are 45 NZ electricity ICPs and 10 NZ gas rows — NZ
+per-ICP accounts were replaced in 2023 by one account per location — plus 2 AU small energy sites.
+
+Note: saving through the spreadsheet library rewrites a few Annual Consumption values in column K with a
+shorter decimal representation (worst difference 4.5e-16 relative, about a nano-kWh). The stored numbers
+are identical at Excel's own precision; no other cell left of column V changes.
 
 ## New Zealand
 
