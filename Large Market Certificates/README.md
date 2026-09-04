@@ -104,14 +104,28 @@ covers the renewal period. They stay as the historical record and the new accoun
 `LGCS Accounts to Check` tab lists them with `Has data?` pre-set to Yes; set one to No and the Action
 column switches to reuse.
 
-## Double count to raise separately
+## Double count — ten Origin accounts to close
 
-On ten NMIs both the large market account and a small market account are recording the same months in
-Envizi, so the site's electricity is counted twice before any certificate is applied: Somerton (303),
-Utilities Derrimut, Bayswater (302), Dandenong - PAV, Mulgrave, Wodonga (315), Gillman - PAV,
-Wingfield (523) and Largs Bay ×2. Only the large market account is linked to the virtual meter, so this
-does not affect the set-up, but it needs fixing on the electricity side. The pairs and monthly kWh are on
-the guide page.
+Ten NMIs moved to Engie on 1 Jul 26, but the old Origin large market account was never closed, so both
+accounts are recording July and August: Somerton (303), Utilities Derrimut, Bayswater (302),
+Dandenong - PAV, Mulgrave, Wodonga (315), Gillman - PAV, Wingfield (523) and Largs Bay ×2.
+
+I checked **column M (Contracted Retailer) of the Site Register** before touching anything, and Engie is
+correct on all ten — tendered to Origin, contracted to Engie, 1 Jul 26 to 30 Jun 28, 24 months. On the
+Envizi side the Origin accounts hold **actual** June data then **accrued-only** July and August with no
+`Replaced On`, while the Engie accounts opened exactly 01 Jul 26 and carry **actual** July. So the Origin
+account is the one to close, dated **30 June 2026**.
+
+The stray Origin accruals come to **869,036 kWh / 480 tCO₂e** across the ten. The guide page has a card
+per NMI with both accounts side by side, the month-by-month actual/accrued split, and four tick boxes:
+close the Origin account, clear the accruals, settle the virtual meter source, re-check in a fresh export.
+
+**Settle the source before linking.** All ten are in the create list and each new certificate account is
+currently pointed at the Origin account. Closing Origin leaves the meter on a dead source. The account
+still recording after 1 July is the Engie one, which the connector has styled `Electricity Small Market`
+even though the register has these as large market sites under the renewal. Either have that account
+re-styled `Electricity Large Market` to match the register and point the meter there, or hold Origin open
+until the restyle happens.
 
 ## The 45 accounts
 
@@ -232,6 +246,7 @@ contract has not started, and for a site whose consumption sits on a per-locatio
 ## Still open
 
 - The NSW 25-26 LGC emission factor (above) — settle before linking the rest.
-- The ten double-counting NMIs, on the electricity side.
+- The ten double-counting NMIs — close the Origin accounts at 30 Jun 26 and settle which account the
+  meter follows (above).
 - NZ, once the Ecotricity switch is confirmed.
 - The Envizi Account Style Link for the certificates style, only if the load tab is ever uploaded.
