@@ -1,0 +1,24 @@
+# tools
+
+The generators behind everything in the folder above. Run them from anywhere; paths are absolute.
+
+| Script | Reads | Writes |
+| --- | --- | --- |
+| `build_lmcerts.py` | Site register, Jun–Aug 26 summary, `FY27/Extract_for_Accounts 05 Sep 26.csv`, `FY27/Extract_for_Locations 26 Aug 26.csv` | `Account_Setup_and_Data_Load_-_PM&C_LMCERTSJUL26_Setup.xlsx` |
+| `build_guide_data.py` | The workbook above, the 4 Sep 26 energy export, the accounts extract | `guide_data.json` |
+| `build_register_map.py` | The pristine budget summary, the accounts extract, `guide_data.json` | `..._with_Envizi_accounts.xlsx` |
+| `guide_template.html` + `guide_data.json` | — | `Virtual Meter Guide/Large_Market_Virtual_Meters.html` (replace `/*__DATA__*/null` with the JSON) |
+
+Order: `build_lmcerts.py` → recalc the workbook (LibreOffice, `recalc.py` from the xlsx skill) →
+`build_guide_data.py` → build the page → `build_register_map.py`.
+
+**On a new accounts extract:** drop it in `FY27/`, change the filename and `EXTRACT_DAY` in all three
+scripts, and rerun the chain. The page reads "built" from the extract, so accounts created in Envizi
+show as done once an extract that contains them goes through.
+
+Two rules the scripts encode that are easy to lose:
+
+- A **future `Replaced On` is still open**. Envizi lets you set a close date ahead of time; the account
+  keeps accruing until then. `_still_open()` in each script handles it.
+- **Meters are not accounts.** The energy export lists NEMMCO interval meters as bare-NMI rows with
+  supplier EnergyAction. They are excluded (`Item Type == "Account"`); counting them doubles the site.
