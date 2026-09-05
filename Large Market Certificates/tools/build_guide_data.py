@@ -6,7 +6,7 @@ warnings.filterwarnings("ignore")
 ROOT = "/home/user/RevenueAndUnallocated"
 OUTDIR = f"{ROOT}/Large Market Certificates"
 WB = f"{OUTDIR}/Account_Setup_and_Data_Load_-_PM&C_LMCERTSJUL26_Setup.xlsx"
-EXPORT = f"{ROOT}/Electricity download after bathurst and mogo virual accounts.xlsx"
+EXPORT = f"{ROOT}/Electricity download after the first Claude in Chrome batches.xlsx"   # 4-5 Sep 26, 42 certificate accounts live
 ACC = f"{ROOT}/FY27/Extract_for_Accounts 05 Sep 26.csv"
 OLD = os.path.join(os.path.dirname(__file__), "guide_data.json")
 DST = OLD
@@ -183,7 +183,7 @@ live = [dict(account=a["Account Number"], location=a["Location"], opened=a["Open
              supplier=a["Supplier"], source=a["Account Number"][:-len("_CERTS")])
         for _, a in built.drop_duplicates("Account Number").iterrows()]
 data = dict(built=datetime.date.today().strftime("%d %b %Y"), extract_date="05 Sep 2026",
-            verify_date="04 Sep 2026", rows=rows, lgcs=lgcs, live=live, dual=dual,
+            verify_date="4–5 Sep 2026", rows=rows, lgcs=lgcs, live=live, dual=dual,
             waiting=waiting, nz=old["nz"])
 json.dump(data, open(DST, "w"), ensure_ascii=False)
 import collections

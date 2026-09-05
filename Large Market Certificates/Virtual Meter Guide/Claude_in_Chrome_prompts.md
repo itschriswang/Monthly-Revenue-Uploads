@@ -5,6 +5,8 @@ run at least once against the real screens; the quirks noted inside them are rea
 while it works — it only sees the active tab.
 
 Progress as of the 05 Sep 26 extract: **43 of 60** permanent accounts built. Prompt 1 below is the last 17.
+Run prompt 0b first — Mogo's two certificate accounts are not where the last export left them. Prompt 3 (the
+25-26 factors) is for a later session.
 
 ---
 
@@ -105,9 +107,18 @@ didn't take — stop and tell me.
 ======================= THE ACCOUNTS · 17 across 16 locations =======================
 
 ### Asphalt Prod - Mogo (154) — ref 154   [NSW]
-    Leave alone here: LGCS_4001127731, LGCS_4204072845, 50002617992_4204072845_CERTS
+    Leave alone here: LGCS_4001127731, LGCS_4204072845
+    50002617992_4204072845_CERTS is ALSO here, opened 7/1/2026, and holds no data. Do
+    not create it again. If prompt 0b showed it has no relationship, it is empty and
+    ready: skip step 3 for it and run steps 4–6 with src 50002617992_4204072845,
+    expecting Jun none · Jul 29,519 · Aug 28,511. If it already has a relationship to
+    that account, leave it. If its relationship points at 50002769514_4001127731 or
+    its Account Ref reads 4001127731, stop and show me — that is the 4 Sep account
+    renamed onto the wrong NMI.
  1. 50002769514_4001127731_CERTS · ref 4001127731 · src 50002769514_4001127731
     Expect Jun none · Jul 3,499 · Aug 3,499
+    (This one existed on 4 Sep and has since gone. Step 2's CERTS filter tells you
+    whether it is back; if it is there, stop and show me rather than remake it.)
 
 ### Asphalt Prod - Somerton (303) — ref L9.J.17032627   [VIC]
     Leave alone here: LGCS_6001311036
@@ -220,33 +231,109 @@ Energy Certificates.
 ## 2 · Close the 14 double-counting accounts (section 1)
 
 ```
-On the Envizi tab. These accounts are still recording months that another
-account already covers, so the site's electricity is double counted. For each
-one, open the account and set Replaced On to the date shown. Do NOT delete any
-account — Replaced On only.
+You're helping me close off accounts in IBM Envizi (au001.envizi.com). I'm logged
+in on the Envizi tab. Work through the accounts listed at the bottom ONE AT A
+TIME, in order.
 
-50002646138_6001311036   Asphalt Prod - Somerton (303)        30 Jun 2026
-50002646140_6203753676   Utilities Derrimut Office            30 Jun 2026
-50002946681_6204134328   Asphalt Prod - Shepparton (308)      30 Jun 2026
-50002646141_6305920528   Asphalt Prod - Bayswater (302)       30 Jun 2026
-50002929573_6306009124   Asphalt Prod - Traralgon (300)       30 Jun 2026  ← currently reads 30 Oct 2026; change it
-50002646142_6407100027   Dandenong - PAV                      30 Jun 2026
-50002646152_6407695655   Mulgrave - Wellington Rd, Clayton    30 Jun 2026
-50002646143_VBBB002698   Asphalt Prod - Wodonga (315)         30 Jun 2026
-50002618025_2001160742   Gillman - PAV                        30 Jun 2026
-50002618027_2002254877   Asphalt Prod - Wingfield (523)       30 Jun 2026
-50002656871_SAAAAAB023   Largs Bay                            30 Jun 2026
-50002618029_SAAAAAC481   Largs Bay                            30 Jun 2026
+WHAT "CLOSE" MEANS HERE
+Set the account's Replaced On date. Nothing else. Do NOT delete, move or merge
+any account, and do NOT touch Opened On - it sits directly under Replaced On on
+the same form and must stay as it is.
 
-Two more need a date confirmed first, so do these LAST and ask me before saving:
-5000021_3120129028       Gympie
-5000021_QB05383854       Asphalt Prod - Archerfield (406)
-Their sibling 5000021_ accounts were closed at 31 Mar, 31 May and 30 Jun 26 —
-show me what you find on those two and I'll pick the date.
+WHY
+On each of these NMIs the site switched retailer on 1 Jul 2026 and the new
+account is already billing the actuals, but the old account was never closed
+so it keeps accruing the same months. Closing it at 30 Jun 2026 stops the
+double count from July on. The June actual stays where it is.
 
-Do the first one, stop, and show me before continuing. Then work down the list,
-and report any account that's already closed or that you can't find.
+THIS BATCH HAS DECOYS
+The NEW account sits at the same location under the same NMI. It is the
+9000182xx Engie one (or the 1003xxx CS Energy one for the last two). Never
+open Edit Account on it. The account to close is always the one I name -
+match the full account number character for character.
+
+=== STEP 1 · Find the account ===
+Top-right search, dropdown set to "Accounts". Paste the full account number,
+open it. You land on the Account Summary page. Confirm three things before
+going further: the account number in the header and left panel is exactly
+mine, "Relates to" is the location I give you, and "Replaced On : -" (or the
+date I say it currently reads). If any of those disagree, stop and show me.
+
+=== STEP 2 · Open the form ===
+Click the blue "Actions" button (top right, next to Page Settings). The menu
+has Capture Data, Edit Account and Account Settings. Choose "Edit Account".
+Do NOT choose Capture Data.
+
+=== STEP 3 · Set Replaced On ===
+On the form find "Replaced On:" - a date field with a calendar icon. Click the
+calendar icon. It opens on the current month, so page back to the month I
+give you and click the day. The field should then read the date in m/d/yyyy
+form (30 Jun 2026 shows as 6/30/2026). If typing works better, type it and
+tab out, then read it back to check the month and day didn't swap.
+
+Leave "Opened On:" exactly as it was - blank stays blank, a date stays that
+date. Change nothing else on the form.
+
+Save.
+
+=== STEP 4 · Check it ===
+Back on the Account Summary page, the left panel should now read
+"Replaced On : <the date>". Then Review -> Monthly Data: Jun 2026 should
+still show its actual; Jul and Aug 2026 should no longer accrue. If the
+accruals are still there straight after saving, note it - Envizi can take a
+refresh to drop them - and move on.
+
+Report, per account: the account number, the location, what Replaced On read
+before, what it reads now, and whether Opened On is unchanged.
+
+Do the first one, stop and show me before continuing. Once I confirm, work
+down the list without stopping, and tell me about any account that already
+had a Replaced On, that you couldn't find, or where the screen didn't match.
+
+================== THE ACCOUNTS · Replaced On = 30 Jun 2026 ==================
+
+Old Origin account, site now on Engie (9000182xx is the new one - leave it):
+
+ 1. 50002646138_6001311036   Asphalt Prod - Somerton (303)       new: 900018217_6001311036
+ 2. 50002646140_6203753676   Utilities Derrimut Office           new: 900018212_6203753676
+ 3. 50002946681_6204134328   Asphalt Prod - Shepparton (308)     new: 900018214_6204134328
+ 4. 50002646141_6305920528   Asphalt Prod - Bayswater (302)      new: 900018215_6305920528
+ 5. 50002929573_6306009124   Asphalt Prod - Traralgon (300)      new: 900018219_6306009124
+      Replaced On currently reads 10/30/2026 - a date in the future, so the
+      account is still accruing. Change it to 6/30/2026; do not leave it.
+ 6. 50002646142_6407100027   Dandenong - PAV                     new: 900018211_6407100027
+ 7. 50002646152_6407695655   Mulgrave - Wellington Rd, Clayton   new: 900018210_6407695655
+ 8. 50002646143_VBBB002698   Asphalt Prod - Wodonga (315)        new: 900018213_VBBB002698
+ 9. 50002618025_2001160742   Gillman - PAV                       new: 900018206_2001160742
+10. 50002618027_2002254877   Asphalt Prod - Wingfield (523)      new: 900018209_2002254877
+11. 50002656871_SAAAAAB023   Largs Bay                           new: 900018208_SAAAAAB023
+12. 50002618029_SAAAAAC481   Largs Bay                           new: 900018207_SAAAAAC481
+
+=============== TWO MORE · date to be confirmed, do these LAST ================
+
+Second CS Energy account on the same NMI, created by the Utilities Connector
+with no Opened On. The 1003xxx account is the live one - leave it.
+
+13. 5000021_3120129028       Gympie                              live: 1003085_3120129028
+14. 5000021_QB05383854       Asphalt Prod - Archerfield (406)    live: 1003081_QB05383854
+
+For these two, before opening Edit Account: open the LIVE 1003xxx account,
+Review -> Monthly Data, and tell me the earliest month it holds data. The
+connector closed the other 5000021_ accounts the day before their 1003xxx
+replacement opened (31 Mar, 31 May or 30 Jun 2026). Show me what you find
+and STOP - I'll give you the date, then do steps 1-4.
+
+RULES
+- Replaced On only. Never delete, move, or edit anything else on any account.
+- Never open Edit Account on the new 9000182xx / 1003xxx account.
+- If the account already has a Replaced On other than the one I've noted, stop
+  and show me.
+- If a screen doesn't match what I've described, stop and describe what you see.
 ```
+
+Expected after the run: the 12 Origin accounts read Replaced On 6/30/2026 on their Summary pages, Traralgon
+included, and the next accounts extract shows them with `Replaced On` = 30 Jun 2026. Section 1 on the guide
+page reads from the extract, so it catches up on the next rebuild.
 
 ---
 
@@ -283,6 +370,32 @@ NEGATIVE — if a field won't take a minus, stop. Check for an existing 25-26 ro
 for the region first; skip and tell me if one exists. Never edit or delete an
 existing factor. Do NSW first, stop and show me, then the rest.
 ```
+
+---
+
+## 0b · Mogo — what is actually there (read-only)
+
+```
+On the Envizi tab. Read-only — create, edit, save or delete nothing.
+Find location "Asphalt Prod - Mogo (154)" (Location Ref 154), Quick links →
+Accounts, Show All Accounts, filter Account Number on "CERTS". List every row you
+see with its full account number, Account Ref, Supplier and Opened On.
+
+Then for each _CERTS row whose supplier is LGC Virtual Account: tick it, Actions →
+Virtual Account Setup, and tell me what the Virtual Account Relationships grid
+shows — 0 Row, or the source account, Effective From and Effective To. Screenshot
+the grid. Do not click Create New, Delete, Close or Move. Then open the account and
+read Review → Monthly Data for Jun, Jul and Aug 2026.
+
+I expect to see 50002617992_4204072845_CERTS (Account Ref 4204072845). Tell me
+whether 50002769514_4001127731_CERTS is there at all, and whether either account's
+Account Ref disagrees with the NMI in its own name.
+```
+
+Expected, if the 05 Sep extract is right: one row, `50002617992_4204072845_CERTS`, ref 4204072845, opened
+7/1/2026, **0 Row** on the relationships grid and no monthly data. That is the "created, not linked" state
+and prompt 1's Mogo card picks it up from there. The account I made on 4 Sep, `50002769514_4001127731_CERTS`,
+should be absent — it is in neither the 05 Sep extract nor the export taken after the first batches.
 
 ---
 

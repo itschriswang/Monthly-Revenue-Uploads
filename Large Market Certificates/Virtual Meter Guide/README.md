@@ -4,13 +4,12 @@
 meters at the AU electricity sites under the FY26–28 renewal agreements — the brief, the evidence, and a
 four sections in the order I work them:
 
-1. **Close these accounts** — 13 NMIs where a second account is still recording the same months.
-2. **Make these virtual accounts** — 56 permanent ones, each with the values to key in and the source account to link.
-3. **Make these, then come back** — 14 temporary accounts on sites whose contracted retailer has no
-   account in Envizi yet. They get built against the account recording today, so the renewable claim is
-   in the numbers, and a **delete register** at the bottom of the section tracks each one for deletion
-   and remaking later. Four just need an account allocated out of Unallocated Accounts first, which
-   avoids the rework entirely.
+1. **Close these accounts** — 14 NMIs where a second account is still recording the same months.
+2. **Make these virtual accounts** — 60 permanent ones, each with the values to key in and the source account to link.
+3. **Make these, then come back** — 9 temporary accounts on Queensland sites whose contracted retailer
+   (Engie) has no account in Envizi yet. They get built against the CS Energy account recording today, so
+   the renewable claim is in the numbers, and a **delete register** at the bottom of the section tracks
+   each one for deletion and remaking later.
 4. **Other** — collapsed; scope, exclusions, the historical `LGCS_` accounts, NZ and the field reference.
 
 **Open it by double-clicking the file** (it is self-contained; no server needed). Ticks and notes are
@@ -23,4 +22,7 @@ Type and colour follow the Portfolio repo — Space Grotesk, Inter, JetBrains Mo
 
 It is generated from the review workbook one folder up
 (`Account_Setup_and_Data_Load_-_PM&C_LMCERTSJUL26_Setup.xlsx`) and the Jun–Aug 26 Envizi data, so the
-numbers on the page and in the workbook agree. Built 05 Sep 2026 from the 05 Sep 2026 accounts extract, which already carries the 43 accounts built so far — those show as done on the page.
+numbers on the page and in the workbook agree. Built 05 Sep 2026 from the 05 Sep 2026 accounts extract, which
+already carries the 43 accounts built so far — those show as done on the page. The month figures come from
+the energy export taken after the first Claude in Chrome batches, which verified 42 of those 43 mirroring
+their source exactly.
