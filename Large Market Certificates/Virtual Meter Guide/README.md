@@ -23,4 +23,4 @@ Type and colour follow the Portfolio repo — Space Grotesk, Inter, JetBrains Mo
 
 It is generated from the review workbook one folder up
 (`Account_Setup_and_Data_Load_-_PM&C_LMCERTSJUL26_Setup.xlsx`) and the Jun–Aug 26 Envizi data, so the
-numbers on the page and in the workbook agree. Built 04 Sep 2026 from the 03 Sep 2026 accounts extract.
+numbers on the page and in the workbook agree. Built 05 Sep 2026 from the 05 Sep 2026 accounts extract, which already carries the 43 accounts built so far — those show as done on the page.

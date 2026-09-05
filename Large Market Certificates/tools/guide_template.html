@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Large Market Virtual Meters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  /* Neutrals lean a hair toward the matcha brand hue (OKLCH ~118) at low chroma,
+     the way the portfolio's do, so a "grey" surface still belongs to the palette. */
+  --bg:oklch(0.978 0.007 118); --surface:#FFFFFF; --surface-2:oklch(0.958 0.010 118); --surface-3:oklch(0.925 0.014 118);
+  --ink:oklch(0.207 0.022 118); --ink-2:oklch(0.470 0.020 118); --ink-3:oklch(0.615 0.017 118);
+  --line:oklch(0.917 0.008 118); --line-2:oklch(0.853 0.013 118);
+  --accent:#6A7614; --accent-ink:#FFFFFF; --accent-soft:#EDF3D2; --accent-deep:#525C0F;
+  --lime:#C1E043; --lime-soft:#E9F2C2; --lime-wash:#F4F9E2; --forest:#21300F;
+  --focus:#6A7614;
+  --c1:#6A7614; --c2:#635BFF; --c3:#C77800; --c4:#E0234E;          /* validated categorical, light */
+  --good:#4F7A16; --warn:#C77800; --serious:#D2622A; --critical:#C21431; /* status, reserved */
+  --good-soft:#E7F0CF; --warn-soft:#FBEDD6; --serious-soft:#FBE4D8; --critical-soft:#FBE0E4;
+  --shadow:0 1px 2px rgba(33,48,15,.05), 0 6px 22px rgba(33,48,15,.07);
+  --shadow-lift:0 16px 44px rgba(33,48,15,.13), 0 4px 12px rgba(33,48,15,.06);
+  --radius:18px; --radius-s:12px; --radius-xs:8px;
+  --ease:cubic-bezier(0.25,1,0.5,1);
+  --display:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
+  --body:"Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono","Courier New",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:oklch(0.175 0.014 118); --surface:oklch(0.222 0.015 118); --surface-2:oklch(0.263 0.016 118); --surface-3:oklch(0.320 0.017 118);
+    --ink:oklch(0.945 0.010 118); --ink-2:oklch(0.780 0.014 118); --ink-3:oklch(0.630 0.014 118);
+    --line:oklch(0.310 0.014 118); --line-2:oklch(0.385 0.016 118);
+    --accent:#A9BA3C; --accent-ink:#16200A; --accent-soft:#2A3410; --accent-deep:#C6D65C;
+    --lime:#C1E043; --lime-soft:#2E3A12; --lime-wash:#242E0F; --forest:#E9F2C2;
+    --focus:#A9BA3C;
+    --c1:#8B9A2C; --c2:#7A72F0; --c3:#C4831F; --c4:#E85A76;        /* validated categorical, dark */
+    --good:#8B9A2C; --warn:#C4831F; --serious:#D9743F; --critical:#E85A76;
+    --good-soft:#2B3512; --warn-soft:#3A2C0E; --serious-soft:#3A2513; --critical-soft:#3B1B23;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 22px rgba(0,0,0,.35);
+    --shadow-lift:0 16px 44px rgba(0,0,0,.55), 0 4px 12px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.175 0.014 118); --surface:oklch(0.222 0.015 118); --surface-2:oklch(0.263 0.016 118); --surface-3:oklch(0.320 0.017 118);
+  --ink:oklch(0.945 0.010 118); --ink-2:oklch(0.780 0.014 118); --ink-3:oklch(0.630 0.014 118);
+  --line:oklch(0.310 0.014 118); --line-2:oklch(0.385 0.016 118);
+  --accent:#A9BA3C; --accent-ink:#16200A; --accent-soft:#2A3410; --accent-deep:#C6D65C;
+  --lime:#C1E043; --lime-soft:#2E3A12; --lime-wash:#242E0F; --forest:#E9F2C2;
+  --focus:#A9BA3C;
+  --c1:#8B9A2C; --c2:#7A72F0; --c3:#C4831F; --c4:#E85A76;
+  --good:#8B9A2C; --warn:#C4831F; --serious:#D9743F; --critical:#E85A76;
+  --good-soft:#2B3512; --warn-soft:#3A2C0E; --serious-soft:#3A2513; --critical-soft:#3B1B23;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 22px rgba(0,0,0,.35);
+  --shadow-lift:0 16px 44px rgba(0,0,0,.55), 0 4px 12px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none !important; animation:none !important} }
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased}
+a{color:var(--accent-deep)} a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--focus); outline-offset:2px; border-radius:4px}
+button{font:inherit}
+h1,h2,h3,h4{font-family:var(--display); text-wrap:balance; margin:0; line-height:1.1; letter-spacing:-.01em}
+h1{font-size:clamp(2.2rem,4.5vw,3.6rem); font-weight:800}
+h2{font-size:1.7rem; font-weight:700; margin-bottom:.6rem}
+h3{font-size:1.15rem; font-weight:700}
+p{margin:0 0 1rem} .prose p, .prose li{max-width:68ch}
+ul,ol{padding-left:1.3rem} li{margin:.25rem 0}
+small,.small{font-size:.86rem}
+.mono{font-family:var(--mono); font-size:.92em; font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--body); font-size:.78rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)}
+.muted{color:var(--ink-2)} .faint{color:var(--ink-3)}
+.num{font-variant-numeric:tabular-nums}
+hr{border:0; border-top:1px solid var(--line); margin:2rem 0}
+
+/* ---------- layout ---------- */
+.shell{display:grid; grid-template-columns:230px minmax(0,1fr); gap:2rem; max-width:1440px; margin:0 auto; padding:0 1.5rem 4rem}
+.rail{position:sticky; top:1rem; align-self:start; height:calc(100vh - 2rem); overflow:auto; padding:1rem 0 1rem .2rem}
+.rail nav a{display:flex; align-items:center; gap:.5rem; padding:.5rem .7rem; margin:.15rem 0; border-radius:99px; color:var(--ink-2); text-decoration:none; font-size:.92rem; transition:background .2s var(--ease), color .2s var(--ease)}
+.rail nav a .tick{width:1.35rem; height:1.35rem; border-radius:50%; border:1.5px solid var(--line-2); display:grid; place-items:center; font-size:.72rem; flex:0 0 auto; font-family:var(--mono); color:var(--ink-3); transition:all .25s var(--ease)}
+.rail nav a .tick.done{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+.rail nav a .tick.part{border-color:var(--accent); color:var(--accent)}
+.rail nav a:hover{background:var(--surface-2); color:var(--ink)}
+.rail nav a.active{color:var(--ink); background:var(--accent-soft); font-weight:600}
+.rail .progress-mini{margin:1rem .6rem 0; font-size:.82rem; color:var(--ink-2)}
+.bar{height:8px; background:var(--surface-3); border-radius:99px; overflow:hidden; margin:.35rem 0}
+.bar > span{display:block; height:100%; background:var(--accent); border-radius:99px; transition:width .45s var(--ease)}
+main{min-width:0}
+section{padding:2.4rem 0 .6rem; border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+.section-head{display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:1rem}
+.section-head .count{font-family:var(--display); font-weight:700; font-size:1.1rem; color:var(--ink-2)}
+@media (max-width: 900px){ .shell{grid-template-columns:1fr} .rail{position:static; height:auto; padding:0} .rail nav{display:flex; flex-wrap:wrap; gap:.2rem} }
+
+/* ---------- masthead ---------- */
+.masthead{max-width:1440px; margin:0 auto; padding:2.2rem 1.5rem 1.6rem}
+.masthead .top{display:flex; justify-content:space-between; align-items:flex-start; gap:2rem; flex-wrap:wrap}
+.masthead .lede{max-width:70ch; font-size:1.12rem; color:var(--ink-2); margin-top:.9rem}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.8rem; margin-top:1.6rem}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:.9rem 1rem; box-shadow:var(--shadow); position:relative; overflow:hidden}
+.kpi .v{font-family:var(--display); font-size:2.1rem; font-weight:700; line-height:1; font-variant-numeric:tabular-nums}
+.kpi .l{font-size:.86rem; color:var(--ink-2); margin-top:.3rem; line-height:1.3}
+.kpi::before{content:""; position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--kpi-color,var(--accent))}
+.kpi{transition:transform .25s var(--ease), box-shadow .25s var(--ease)}
+.kpi:hover{transform:translateY(-2px); box-shadow:var(--shadow-lift)}
+.ring{--p:0; width:112px; height:112px; border-radius:50%; background:conic-gradient(var(--accent) calc(var(--p)*1%), var(--surface-3) 0); display:grid; place-items:center; flex:0 0 auto}
+.ring > div{width:84px; height:84px; border-radius:50%; background:var(--surface); display:grid; place-items:center; text-align:center; line-height:1.05}
+.ring .pct{font-family:var(--display); font-weight:700; font-size:1.5rem}
+.ring .lbl{font-size:.68rem; color:var(--ink-2); text-transform:uppercase; letter-spacing:.06em}
+.ringwrap{display:flex; align-items:center; gap:1rem; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:.8rem 1rem; box-shadow:var(--shadow)}
+.ringwrap .stat{font-size:.9rem; color:var(--ink-2)} .ringwrap .stat b{color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* ---------- chips & badges ---------- */
+.chip{display:inline-flex; align-items:center; gap:.35rem; padding:.12rem .55rem; border-radius:99px; font-size:.78rem; font-weight:600; border:1px solid var(--line-2); background:var(--surface-2); color:var(--ink-2); white-space:nowrap; letter-spacing:.01em}
+.chip.state{font-family:var(--mono); font-weight:500; letter-spacing:.04em}
+.chip.retailer{background:var(--accent-soft); border-color:transparent; color:var(--accent-deep)}
+.chip.good{color:var(--ink)}
+.chip.good{background:var(--good-soft); border-color:transparent; color:var(--ink)}
+.chip.warn{background:var(--warn-soft); border-color:transparent; color:var(--ink)}
+.chip.serious{background:var(--serious-soft); border-color:transparent; color:var(--ink)}
+.chip.crit{background:var(--critical-soft); border-color:transparent; color:var(--ink)}
+.dot{width:.55rem; height:.55rem; border-radius:50%; display:inline-block; flex:0 0 auto}
+.dot.good{background:var(--good)} .dot.warn{background:var(--warn)} .dot.serious{background:var(--serious)} .dot.crit{background:var(--critical)} .dot.none{background:var(--ink-3)}
+
+/* ---------- callouts ---------- */
+.callout{border:1px solid var(--line); border-left:5px solid var(--accent); background:var(--surface); border-radius:var(--radius-s); padding:.9rem 1.1rem; margin:1rem 0; box-shadow:var(--shadow)}
+.callout.warn{border-left-color:var(--warn)} .callout.crit{border-left-color:var(--critical)} .callout.good{border-left-color:var(--good)}
+.callout h3{margin-bottom:.35rem} .callout p:last-child{margin-bottom:0}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1rem}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:1rem 1.2rem; box-shadow:var(--shadow)}
+.panel h3{margin-bottom:.5rem}
+dl.kv{display:grid; grid-template-columns:max-content 1fr; gap:.35rem 1rem; margin:0}
+dl.kv dt{color:var(--ink-2); font-size:.9rem} dl.kv dd{margin:0}
+table{border-collapse:collapse; width:100%; font-size:.92rem}
+th,td{text-align:left; padding:.5rem .6rem; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-3); font-weight:600; background:var(--surface-2); position:sticky; top:0}
+.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow)}
+tbody tr:hover{background:var(--surface-2)}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums}
+
+/* ---------- outcome bar ---------- */
+.stack{display:flex; height:36px; border-radius:10px; overflow:hidden; gap:2px; background:var(--bg)}
+.stack > div{display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-family:var(--display); font-size:.95rem; min-width:2.2rem; font-variant-numeric:tabular-nums}
+.legend{display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; margin-top:.7rem; font-size:.9rem}
+.legend span i{display:inline-block; width:.8rem; height:.8rem; border-radius:3px; margin-right:.45rem; vertical-align:-1px}
+.flow{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:.6rem; margin-top:1rem; counter-reset:step}
+.flow .step{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-s); padding:.75rem .9rem; font-size:.9rem; position:relative}
+.flow .step::before{counter-increment:step; content:counter(step); position:absolute; top:-.7rem; left:.7rem; background:var(--accent); color:var(--accent-ink); font-family:var(--display); font-weight:700; font-size:.8rem; width:1.4rem; height:1.4rem; border-radius:50%; display:grid; place-items:center}
+.flow .step b{display:block; margin-bottom:.2rem}
+
+/* ---------- controls ---------- */
+.controls{display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; margin:.6rem 0 1.2rem; padding:.8rem; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); position:sticky; top:0; z-index:5}
+.controls input[type=search]{flex:1 1 220px; min-width:160px; padding:.5rem .7rem; border:1px solid var(--line-2); border-radius:var(--radius-s); background:var(--bg); color:var(--ink); font:inherit}
+.controls select{padding:.45rem .6rem; border:1px solid var(--line-2); border-radius:var(--radius-s); background:var(--bg); color:var(--ink); font:inherit}
+.controls .spacer{flex:1}
+.btn{padding:.45rem .8rem; border-radius:var(--radius-s); border:1px solid var(--line-2); background:var(--surface); color:var(--ink); cursor:pointer; font-size:.9rem; font-weight:600}
+.btn:hover{background:var(--surface-2)} .btn.primary{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)} .btn.primary:hover{filter:brightness(1.08)}
+.btn.small{padding:.15rem .5rem; font-size:.78rem; font-weight:500}
+.togglebar{display:flex; flex-wrap:wrap; gap:.35rem}
+.togglebar button{padding:.25rem .6rem; border-radius:99px; border:1px solid var(--line-2); background:var(--surface); color:var(--ink-2); font-size:.82rem; cursor:pointer}
+.togglebar button[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+
+/* ---------- cards ---------- */
+.stategroup{margin:1.6rem 0 .6rem} .stategroup h3{display:flex; align-items:center; gap:.7rem; color:var(--ink-2); font-size:1rem; text-transform:uppercase; letter-spacing:.06em}
+.stategroup h3 .n{font-family:var(--body); font-weight:500; color:var(--ink-3); text-transform:none; letter-spacing:0}
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(400px,1fr)); gap:1rem; align-items:start}
+@media (max-width:520px){ .cards{grid-template-columns:1fr} }
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden; border-top:4px solid var(--line-2); transition:box-shadow .25s var(--ease), transform .25s var(--ease), border-color .25s var(--ease)}
+.card:hover{box-shadow:var(--shadow-lift)}
+.card.s-done{background:linear-gradient(var(--lime-wash),var(--surface) 120px)}
+#cards .card .hd{cursor:pointer; user-select:none}
+#cards .card .hd:hover h4{color:var(--accent-deep)}
+#cards .card .hd .caret{color:var(--ink-3); font-size:.75rem; transition:transform .25s var(--ease); flex:0 0 auto; align-self:flex-start; margin-top:.35rem}
+#cards .card.open .hd .caret{transform:rotate(90deg)}
+#cards .card:not(.open) .body, #cards .card:not(.open) .months, #cards .card:not(.open) .note, #cards .card:not(.open) .notes{display:none}
+.peek{padding:.1rem 1rem .7rem; display:flex; gap:.6rem; align-items:baseline; flex-wrap:wrap; font-family:var(--mono); font-size:.82rem}
+#cards .card.open .peek{display:none}
+.peek .val{overflow-wrap:anywhere; min-width:0}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.22)}100%{transform:scale(1)}}
+.checks input:checked{animation:pop .3s var(--ease)}
+.card.just-done{animation:cheer .55s var(--ease)}
+@keyframes cheer{0%{transform:scale(1)}35%{transform:scale(1.015)}100%{transform:scale(1)}}
+.card.s-progress{border-top-color:var(--warn)} .card.s-done{border-top-color:var(--good)} .card.s-hold{border-top-color:var(--ink-3)}
+.card .hd{padding:.9rem 1rem .5rem; display:flex; justify-content:space-between; gap:.5rem .8rem; align-items:flex-start; flex-wrap:wrap}
+.card .hd > div:not(.chips){flex:1 1 14rem; min-width:0}
+.card .chips{flex:0 1 auto; align-self:flex-start}
+.card .hd h4{font-family:var(--display); font-size:1.1rem; font-weight:700; line-height:1.2; overflow-wrap:anywhere}
+.card .hd .sub{font-size:.85rem; color:var(--ink-2); margin-top:.2rem}
+.card .chips{display:flex; gap:.35rem; flex-wrap:wrap; justify-content:flex-end}
+.card .body{padding:.3rem 1rem .6rem; display:grid; grid-template-columns:1fr 1fr; gap:.6rem 1rem}
+@media (max-width:560px){ .card .body{grid-template-columns:1fr} }
+.field{font-size:.86rem; min-width:0} .field .k{color:var(--ink-3); font-size:.74rem; text-transform:uppercase; letter-spacing:.06em} .field .v{font-family:var(--mono); font-size:.86rem; display:flex; flex-wrap:wrap; gap:.15rem .5rem; align-items:baseline} .field .val{overflow-wrap:anywhere; min-width:0}
+.copy{border:0; background:transparent; color:var(--accent-deep); cursor:pointer; font-size:.74rem; padding:0 .2rem; font-family:var(--body)} .copy:hover{text-decoration:underline}
+.months{display:flex; gap:.4rem; flex-wrap:wrap; padding:.2rem 1rem .5rem}
+.month{display:inline-flex; align-items:center; gap:.4rem; border:1px solid var(--line); border-radius:99px; padding:.25rem .6rem; font-size:.8rem; background:var(--bg)}
+.month .kwh{font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--ink)}
+.note{margin:0 1rem .6rem; padding:.6rem .75rem; border-radius:var(--radius-s); font-size:.85rem; background:var(--surface-2)}
+.note.warn{background:var(--warn-soft)} .note.hist{background:var(--surface-2); border-left:3px solid var(--c2)}
+.checks{display:grid; grid-template-columns:repeat(3,1fr); gap:.4rem; padding:.6rem 1rem .5rem; border-top:1px solid var(--line); margin-top:auto; background:var(--surface-2)}
+.checks label{display:flex; gap:.45rem; align-items:flex-start; font-size:.84rem; cursor:pointer; padding:.35rem .4rem; border-radius:var(--radius-s)}
+.checks label:hover{background:var(--surface)}
+.checks input{accent-color:var(--accent); cursor:pointer}
+.checks label:has(input:checked){color:var(--ink-2)} .checks label:has(input:checked) span{text-decoration:none}
+.checks input{width:1.05rem; height:1.05rem; margin-top:.1rem; accent-color:var(--accent); flex:0 0 auto}
+.checks .when{display:block; font-size:.72rem; color:var(--ink-3)}
+.checks.two{grid-template-columns:repeat(2,1fr)}
+.grouphead{margin:1.7rem 0 .3rem; display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap; color:var(--ink-2); font-size:.95rem; text-transform:uppercase; letter-spacing:.06em}
+.grouphead .n{font-family:var(--body); font-weight:500; color:var(--ink-3); text-transform:none; letter-spacing:0; font-size:.85rem}
+.prose.lead{font-size:1.02rem; max-width:74ch}
+.prose.small{font-size:.88rem}
+details{border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); margin-bottom:.7rem; box-shadow:var(--shadow)}
+details > summary{cursor:pointer; padding:.8rem 1.1rem; font-size:.95rem; list-style:none; display:flex; align-items:center; gap:.5rem}
+details > summary::-webkit-details-marker{display:none}
+details > summary::before{content:"\25B8"; color:var(--ink-3); transition:transform .15s; display:inline-block}
+details[open] > summary::before{transform:rotate(90deg)}
+details > summary:hover{background:var(--surface-2)}
+.detailbody{padding:0 1.1rem 1.1rem; border-top:1px solid var(--line); padding-top:.8rem}
+.detailbody .kv{margin:0}
+#delTable td{vertical-align:top}
+#delTable tr.reviewed{opacity:.55}
+#waitCards .card{border-top-style:dashed}
+.checks label .hint{display:block; font-size:.74rem; color:var(--ink-3); font-weight:400; font-family:var(--body)}
+.sidebyside{display:grid; grid-template-columns:1fr 1fr; gap:.6rem; padding:.2rem 1rem .6rem}
+.lane{border:1px solid var(--line); border-radius:var(--radius-s); padding:.6rem .7rem; background:var(--bg); min-width:0}
+.lane.close{border-left:3px solid var(--critical)} .lane.keep{border-left:3px solid var(--good)}
+.lane .lbl{font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-3); display:block; margin-bottom:.2rem}
+.lane .acctrow{display:flex; gap:.4rem; align-items:baseline; justify-content:space-between}
+.lane .acct{font-family:var(--mono); font-size:.8rem; overflow-wrap:anywhere; line-height:1.35; min-width:0}
+.lane .meta{font-size:.75rem; color:var(--ink-2); margin-top:.2rem}
+.lane ul{list-style:none; margin:.4rem 0 0; padding:.35rem 0 0; font-size:.78rem; border-top:1px solid var(--line)}
+.lane li{display:flex; justify-content:space-between; gap:.4rem; padding:.12rem 0; align-items:center}
+.lane li .n{font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--ink)}
+.lane li .tag{font-size:.7rem; color:var(--ink-3)}
+@media (max-width:640px){ .sidebyside{grid-template-columns:1fr} .checks.two{grid-template-columns:1fr} }
+.notes{padding:.4rem 1rem .9rem; background:var(--surface-2)}
+.notes textarea{width:100%; min-height:38px; resize:vertical; border:1px solid var(--line-2); border-radius:var(--radius-s); padding:.4rem .6rem; font:inherit; font-size:.85rem; background:var(--surface); color:var(--ink)}
+.empty{padding:2.4rem; text-align:center; color:var(--ink-2); border:1.5px dashed var(--line-2); border-radius:var(--radius); background:var(--surface)}
+.empty .big{font-size:1.6rem; display:block; margin-bottom:.4rem}
+.nextup{display:flex; align-items:center; gap:.8rem; flex-wrap:wrap; background:var(--accent-soft); border:1px solid transparent; border-radius:99px; padding:.5rem .5rem .5rem 1.1rem; margin:0 0 1rem; font-size:.92rem}
+.nextup b{font-family:var(--display)}
+.nextup .btn{margin-left:auto}
+.alldone{background:var(--lime-wash); border:1px solid var(--accent); border-radius:var(--radius); padding:1.1rem 1.3rem; margin-bottom:1rem; display:flex; gap:.9rem; align-items:center}
+.alldone .big{font-size:1.7rem}
+.kbd{font-family:var(--mono); font-size:.72rem; border:1px solid var(--line-2); border-bottom-width:2px; border-radius:6px; padding:.05rem .3rem; background:var(--surface); color:var(--ink-2)}
+.btn{border-radius:99px; transition:transform .2s var(--ease), box-shadow .2s var(--ease)}
+.btn:hover{transform:translateY(-1px)}
+.stack > div{transition:flex .4s var(--ease)}
+
+/* ---------- LGC table rows ---------- */
+tr.reviewed td{color:var(--ink-3)} tr.reviewed td:first-child{color:var(--ink)}
+details{border:1px solid var(--line); border-radius:var(--radius-s); background:var(--surface); padding:.6rem .9rem; margin:.6rem 0}
+summary{cursor:pointer; font-weight:600}
+.footer{max-width:1440px; margin:0 auto; padding:1.5rem; color:var(--ink-3); font-size:.85rem; border-top:1px solid var(--line)}
+.toast{position:fixed; bottom:1.2rem; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:.5rem .9rem; border-radius:99px; font-size:.86rem; opacity:0; pointer-events:none; transition:opacity .2s}
+.toast.show{opacity:1}
+dialog{border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); color:var(--ink); max-width:640px; width:92vw; padding:1.2rem}
+dialog textarea{width:100%; min-height:180px; font-family:var(--mono); font-size:.8rem; background:var(--bg); color:var(--ink); border:1px solid var(--line-2); border-radius:var(--radius-s); padding:.5rem}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+@media print{ .rail,.controls,.checks input,.copy,.btn,.notes,.toast{display:none !important} .shell{grid-template-columns:1fr} .card{break-inside:avoid; box-shadow:none} section{padding-top:1.2rem} body{font-size:12px} }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="top">
+    <div>
+      <div class="eyebrow">Downer · Envizi · FY26–28 electricity renewals · built from the 03 Sep 2026 extracts</div>
+      <h1>Large Market Virtual Meters</h1>
+      <p class="lede">The sites contracted under the FY26–28 renewal agreements are renewable from 1 July 2026. Envizi shows that through a <strong>Certificates - Location - kWh</strong> account set up as a <strong>virtual meter</strong> of the account carrying the site's electricity. Work the four sections in order; ticks and notes save in this browser.</p>
+    </div>
+    <div class="ringwrap" aria-live="polite">
+      <div class="ring" id="ring"><div><span class="pct" id="ringPct">0%</span><span class="lbl">verified</span></div></div>
+      <div class="stat" id="ringStat"></div>
+    </div>
+  </div>
+  <div class="kpis" id="kpis"></div>
+</header>
+
+<div class="shell">
+<aside class="rail">
+  <nav id="nav" aria-label="Sections"></nav>
+  <div class="progress-mini"><div>Section 2 progress</div><div class="bar"><span id="miniBar" style="width:0%"></span></div><div id="miniText"></div>
+    <div class="small faint" style="margin-top:.6rem"><span class="kbd">/</span> search · <span class="kbd">n</span> next up · <span class="kbd">esc</span> clear</div></div>
+  <div class="progress-mini" style="margin-top:.6rem"><button class="btn small" id="btnExport">Save progress…</button> <button class="btn small" id="btnPrint">Print</button></div>
+</aside>
+
+<main>
+
+<section id="close">
+  <div class="section-head"><h2>1 &middot; Close these accounts</h2><span class="count" id="dualCount"></span></div>
+  <p class="prose lead">A second account is still recording months the site's live account already covers, so the electricity is counted twice. <b><span id="dualKwh"></span>&nbsp;kWh</b> and <b><span id="dualCo2"></span>&nbsp;tCO<sub>2</sub>e</b> of July and August sit on top of what should be there.</p>
+
+  <h3 class="grouphead">Retailer switched, old account left open <span class="n" id="dualNRet"></span></h3>
+  <p class="prose muted small">Moved to Engie on 1 Jul 26; the old retailer's account was never closed. Column M of the Site Register confirms Engie on all of them. Set <b>Replaced On = 30 Jun 2026</b>.</p>
+  <div class="cards" id="dualCardsRet"></div>
+
+  <h3 class="grouphead">Second connector account on the same NMI <span class="n" id="dualNDup"></span></h3>
+  <p class="prose muted small">Same retailer, two connector accounts, the extra one accruing with no Opened On and no actuals. Nine of its <span class="mono">5000021_</span> siblings are already closed at 31 Mar, 31 May and 30 Jun 26 &mdash; check the date against those rather than assuming.</p>
+  <div class="cards" id="dualCardsDup"></div>
+</section>
+
+<section id="make">
+  <div class="section-head"><h2>2 &middot; Make these virtual accounts</h2><span class="count" id="checklistCount"></span></div>
+  <div class="callout crit"><h3>Fix the NSW LGC factor before linking</h3><p>The two live accounts use <b>LGCs NSW 24-25</b> at &minus;0.66 kg/kWh against electricity on <b>25-26 New South Wales</b> at 0.64, so a 100% meter over-offsets by ~3% and the site goes <em>negative</em>. Victoria has an <em>LGCs Victoria 25-26</em>; NSW needs its 25-26 equivalent added or mapped.</p></div>
+  <div class="callout"><h3>Two rules that decide everything else</h3><p><b>Create it empty.</b> Envizi only allows a virtual meter on an account holding no records, so each one is made by hand and the PM&amp;C load tab is never uploaded &mdash; it stays as the record of what each account should look like.</p><p><b>Opened On = <span class="mono">2026-07-01</span>.</b> That is what stops the meter reaching back before the renewal. <span data-n="hist"></span> of the <span data-n="create"></span> sources hold earlier data.</p></div>
+  <div class="nextup" id="nextUp"></div>
+  <div class="controls">
+    <input id="q" type="search" placeholder="Search location, site, NMI, account…   (press /)" aria-label="Search">
+    <select id="fState" aria-label="State"><option value="">State: all</option></select>
+    <select id="fRetailer" aria-label="Retailer"><option value="">Retailer: all</option></select>
+    <select id="fStatus" aria-label="Status"><option value="">Status: all</option><option value="todo">Not started</option><option value="progress">In progress</option><option value="done">Verified</option></select>
+    <select id="fPrior" aria-label="Historical LGCS"><option value="">Historical LGCS_: any</option><option value="yes">Has one</option><option value="no">None</option></select>
+    <select id="fHist" aria-label="Source history"><option value="">Pre-Jul-26 data: any</option><option value="Yes">Yes</option><option value="No">No</option></select>
+    <select id="fDual" aria-label="Flags"><option value="">Flags: any</option><option value="dual">Double count on this NMI</option><option value="sm">Small-market-styled source</option></select>
+    <button class="btn" id="btnClear">Clear</button>
+  </div>
+  <div id="cards"></div>
+</section>
+
+<section id="waiting">
+  <div class="section-head"><h2>3 &middot; Make these, then come back</h2><span class="count" id="waitCount"></span></div>
+  <p class="prose lead">These sites are contracted to a retailer that has no account on the NMI in Envizi yet, so they are still recording against the old supply. We're building the certificate accounts anyway so the renewable claim is in the numbers from July &mdash; but <b>each one is temporary</b>.</p>
+  <div class="callout crit"><h3>Every account in this section gets deleted later</h3><p>The name keys off the source account, so <span class="mono">1003072_3051770385_CERTS</span> is only right while the meter follows <span class="mono">1003072_3051770385</span>. When the contracted retailer's account appears, the source changes and the name no longer matches it &mdash; so the account is <b>deleted and remade</b> against the new one, not repointed. The register at the bottom of this section is the list to work from when that happens.</p></div>
+  <div class="callout"><h3>Four of them can skip the rework</h3><p>On four NMIs the contracted retailer's account already exists &mdash; it is just sitting in <span class="mono">Unallocated Accounts</span> instead of at the site. Allocate it first and the certificate account can be built against the right source straight away, with nothing to delete later. They are marked <span class="chip warn"><span class="dot warn"></span>allocate first</span> below.</p></div>
+  <div class="cards" id="waitCards"></div>
+
+  <h3 class="grouphead">Delete register <span class="n" id="delCount"></span></h3>
+  <p class="prose muted small">What has been built here, what it currently follows, and what it will have to be remade against. Tick the last column once the account has been deleted and remade.</p>
+  <div class="tablewrap"><table id="delTable"><thead><tr><th>Done</th><th>Location</th><th>Temporary account</th><th>Following now</th><th>Waiting on</th><th>Made?</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="other">
+  <div class="section-head"><h2>4 &middot; Other</h2><span class="count">no action</span></div>
+
+  <details open>
+    <summary><b>How a site got into section 2</b></summary>
+    <div class="detailbody">
+      <p class="small">The Site Register's <b>green rows</b> are the renewable ones &mdash; 78 of the 81 <span class="mono">AU Large Electricity</span> rows. Each row is matched on its NMI (the text after the last underscore in an Envizi account number) to the active account <b>carrying that NMI's electricity from 1 Jul 26</b>; that account becomes the virtual meter's source. Region was never used.</p>
+      <p class="small"><b>The meter class does not decide scope.</b> Category Management, 4 Sep 26, on a Mogo NMI: <em>"from a metering perspective it may be considered a small site, but from an electricity supply agreement perspective, it's being treated as a large site."</em> So <span class="mono">Electricity Small Market</span> in Envizi does not take a site out of the renewal &mdash; <span data-n="small"></span> of the <span data-n="create"></span> sources carry that style.</p>
+      <div class="panel" style="margin-top:.8rem"><div class="stack" id="stack" role="img" aria-label="Outcome of the 81 register rows"></div><div class="legend" id="legend"></div></div>
+    </div>
+  </details>
+
+  <details>
+    <summary><b>Already renewable, or excluded by name</b> &mdash; <span data-n="alinta"></span> + <span data-n="named"></span> rows, nothing to create</summary>
+    <div class="detailbody grid2">
+      <div>
+        <p class="small muted">Alinta WA records green kWh on the electricity account itself since 1 Jul 26, with negative CO<sub>2</sub>e &mdash; an offset is already in place.</p>
+        <div class="tablewrap"><table id="alintaTable"><thead><tr><th>Location</th><th>NMI</th><th class="num">Green kWh Jul&ndash;Aug 26</th><th class="num">tCO2e</th></tr></thead><tbody></tbody></table></div>
+      </div>
+      <div>
+        <div class="tablewrap"><table id="namedTable"><thead><tr><th>Location</th><th>NMI</th><th>Why</th></tr></thead><tbody></tbody></table></div>
+        <p class="small muted" style="margin-top:.6rem"><b>Pakenham</b> is not in the register's large market rows and already carries <span class="mono">LGCS_HCMT</span> plus the SEC VIC 100% Renewable Deduction.</p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary><b>Historical <span class="mono">LGCS_</span> accounts</b> &mdash; <span data-n="lgcs"></span> to leave exactly as they are</summary>
+    <div class="detailbody">
+      <p class="small muted">Checked in Envizi 4 Sep 26: all hold LGC data from 2025 and earlier, so none is empty, none can become a virtual meter, and none covers the renewal. The new account sits beside them &mdash; which is why the new names key off the electricity account rather than <span class="mono">LGCS_&lt;NMI&gt;</span>. Tick a row once you've looked at it.</p>
+      <div class="tablewrap"><table id="lgcsTable"><thead><tr><th>Seen</th><th>Account</th><th>Location</th><th>Created</th><th>Register NMI(s)</th><th>New account beside it</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </details>
+
+  <details>
+    <summary><b>New Zealand</b> &mdash; nothing set up yet</summary>
+    <div class="detailbody">
+      <p class="small muted">All NZ electricity is renewable under the new arrangements (TOU on Ecotricity since 1 Jul 26; NTOU moving 1 Jan 27). 114 of the 158 green ICPs resolve to 80 open Envizi locations, 29 of which already have a CERTS account; 44 cannot be placed from the extracts. The NTOU contract has not started, and where consumption sits on a per-location account rather than an <span class="mono">Eco_ICP_</span> account, what the meter should copy needs deciding first.</p>
+      <div class="tablewrap"><table id="nzTable"><thead><tr><th>ICP</th><th>Location</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </details>
+
+  <details>
+    <summary><b>The account, field by field</b></summary>
+    <div class="detailbody">
+      <dl class="kv">
+        <dt>Location</dt><dd>The source account's location, shown on each card.</dd>
+        <dt>Account style</dt><dd><span class="mono">Certificates - Location - kWh</span></dd>
+        <dt>Account number</dt><dd><span class="mono">&lt;source account&gt;_CERTS</span></dd>
+        <dt>Account reference</dt><dd>The NMI.</dd>
+        <dt>Supplier</dt><dd><span class="mono">LGC Virtual Account</span></dd>
+        <dt>Reader</dt><dd>Blank.</dd>
+        <dt>Opened On</dt><dd><span class="mono">2026-07-01</span></dd>
+        <dt>Records</dt><dd><b>None</b> &mdash; it must be empty to become a virtual meter.</dd>
+        <dt>Virtual meter</dt><dd>Source = the account on the card, 100%, add. That one only.</dd>
+        <dt>Usage settings</dt><dd>The <span class="mono">LGCS_</span> accounts use Usage Type <em>Consolidation</em>, Use <em>CO2e and Base Measure</em>, Apportionment 0 &mdash; match if offered, else defaults.</dd>
+      </dl>
+      <p class="small muted"><b>Month chips:</b> <em>actual</em> = billed data loaded, <em>accrued</em> = Envizi's estimate while the bill is outstanding. Certificate accounts are <em>Event Data - No Accruals</em>, so they mirror whatever the source holds and follow it when a bill lands.</p>
+      <p class="small muted"><b>Sources:</b> the site register and rate schedules in <em>Downer_Energy_Contracting_and_Budget_Summary_FY26-28.xlsx</em>, the Jun&ndash;Aug 26 Envizi data, and <em>Extract_for_Accounts 03 Sep 26.csv</em> / <em>Extract_for_Locations 26 Aug 26.csv</em>. The companion workbook <em>Account_Setup_and_Data_Load_-_PM&amp;C_LMCERTSJUL26_Setup.xlsx</em> holds the same review with live formulas.</p>
+    </div>
+  </details>
+</section>
+
+</main>
+</div>
+
+<footer class="footer">
+  <span id="footBuilt"></span> · Progress (ticks, notes) is saved in this browser only — use <em>Save progress…</em> to copy it to another device. <button class="btn small" id="btnReset">Reset all progress</button>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+<dialog id="dlg"><h3 style="margin-bottom:.4rem">Save or restore progress</h3><p class="small muted">Copy this text to keep or move your progress. Paste saved text here and choose Restore to load it.</p><textarea id="dlgText" aria-label="Progress data"></textarea><div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.7rem"><button class="btn" id="dlgCopy">Copy</button><button class="btn primary" id="dlgRestore">Restore</button><button class="btn" id="dlgClose">Close</button></div></dialog>
+
+<script>
+const DATA = /*__DATA__*/null;
+const KEY = "lmvm-progress-v1";
+const D_CREATE="Create", D_GREEN="Exclude - offset on account green component", D_NAMED="Exclude - named site (NT / QTMP / Pakenham)", D_LGC="Exclude - offset exists (LGC account)";
+const LIVE=new Set((DATA.live||[]).map(l=>l.account));
+const STATE_NAMES={NSW:"New South Wales",QLD:"Queensland",VIC:"Victoria",SA:"South Australia",TAS:"Tasmania",WA:"Western Australia",ACT:"Australian Capital Territory",NT:"Northern Territory"};
+let state = load();
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}") }catch(e){ return {} } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)) }catch(e){} }
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=n=>Number(n||0).toLocaleString("en-AU");
+const rows=DATA.rows, creates=rows.filter(r=>r.decision===D_CREATE);
+const rowState=r=>state[r.nmi]||{};
+const OPEN=new Set();          // which cards are expanded, this visit only
+const cardStatus=r=>{ const s=rowState(r); if(s.verified||LIVE.has(r.new_acct)) return "done"; if(s.created||s.linked) return "progress"; return "todo" };
+
+/* ---- masthead ---- */
+(function kpis(){
+  const withPrior=creates.filter(r=>r.certs_n>0).length, noPrior=creates.length-withPrior;
+  const alinta=rows.filter(r=>r.decision===D_GREEN).length, named=rows.filter(r=>r.decision===D_NAMED).length, hist=creates.filter(r=>r.src_history==="Yes").length;
+  const small=creates.filter(r=>r.src_small).length, live=creates.filter(r=>LIVE.has(r.new_acct)).length, todo=creates.length-live;
+  const wait=(DATA.waiting||[]), parked=wait.filter(w=>w.parked).length;
+  const k=[[(DATA.dual||[]).length,"1 · accounts to close","var(--c4)"],[todo,"2 · virtual accounts still to make","var(--c1)"],[wait.length,"3 · temporary accounts, to remake later","var(--c3)"],[parked,"of those can skip the rework — allocate first","var(--c3)"],[live,"already built in Envizi","var(--good)"],[DATA.lgcs.length,"historical LGCS_ accounts to leave alone","var(--c2)"],[alinta+named,"already renewable, or excluded by name","var(--ink-3)"],["81","register rows reviewed","var(--ink-3)"]];
+  document.querySelectorAll('[data-n]').forEach(el=>{ el.textContent={create:creates.length,noprior:noPrior,prior:withPrior,lgcs:DATA.lgcs.length,alinta,named,hist,small,live,todo,dual:(DATA.dual||[]).length,wait:wait.length,parked}[el.dataset.n] });
+  $("#kpis").innerHTML=k.map(([v,l,c])=>`<div class="kpi" style="--kpi-color:${c}"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+  $("#footBuilt").textContent=`Built ${DATA.built} from the ${DATA.extract_date} accounts extract, the 26 Aug 26 locations extract, and the Jun–Aug 26 Envizi export taken ${DATA.verify_date} after the first two accounts were made.`;
+})();
+function sectionTicks(){
+  const dual=DATA.dual||[], wait=DATA.waiting||[];
+  [["close",dual.filter(dualDone).length,dual.length],
+   ["make",creates.filter(r=>cardStatus(r)==="done").length,creates.length],
+   ["waiting",wait.filter(waitBuilt).length,wait.length],
+   ["other",0,0]].forEach(([id,done,total])=>{
+    const el=document.querySelector(`.tick[data-sec="${id}"]`); if(!el) return;
+    if(!total){ el.textContent="\u00B7"; return }
+    const all=done===total;
+    el.textContent=all?"\u2713":String(done);
+    el.className="tick"+(all?" done":done?" part":"");
+    el.title=`${done} of ${total} done`;
+  });
+}
+function updateProgress(){
+  const total=creates.length, done=creates.filter(r=>cardStatus(r)==="done").length, prog=creates.filter(r=>cardStatus(r)==="progress").length;
+  const pct=total?Math.round(done/total*100):0;
+  $("#ring").style.setProperty("--p",pct); $("#ringPct").textContent=pct+"%";
+  $("#ringStat").innerHTML=`<b>${done}</b> of <b>${total}</b> verified<br><b>${prog}</b> in progress<br><b>${total-done-prog}</b> not started`;
+  $("#miniBar").style.width=pct+"%"; $("#miniText").textContent=`${done} verified · ${prog} in progress · ${total-done-prog} to go`;
+  sectionTicks();
+  const dd=(DATA.dual||[]).filter(dualDone).length; $("#dualCount").textContent=`${dd} of ${(DATA.dual||[]).length} closed off`;
+}
+
+/* ---- outcome bar ---- */
+(function stack(){
+  const alinta=rows.filter(r=>r.decision===D_GREEN).length, named=rows.filter(r=>r.decision===D_NAMED).length;
+  const seg=[["Make a virtual account",creates.length,"var(--c1)"],["Make, then remake — no account from the contracted retailer yet",(DATA.waiting||[]).length,"var(--c3)"],["Already renewable — green component (Alinta WA)",alinta,"var(--c2)"],["Named exclusion — NT ×3, QTMP",named,"var(--c4)"]];
+  const total=seg.reduce((a,s)=>a+s[1],0);
+  $("#stack").innerHTML=seg.map(([l,n,c])=>`<div style="flex:${n} 1 0;background:${c}" title="${esc(l)}: ${n}">${n}</div>`).join("");
+  $("#legend").innerHTML=seg.map(([l,n,c])=>`<span><i style="background:${c}"></i>${esc(l)} <b class="num">${n}</b></span>`).join("")+`<span class="faint">= ${total} register rows</span>`;
+})();
+
+/* ---- nav ---- */
+(function nav(){
+  const secs=[...document.querySelectorAll("main section")];
+  $("#nav").innerHTML=secs.map(s=>`<a href="#${s.id}"><span class="tick" data-sec="${s.id}"></span><span>${esc(s.querySelector("h2").textContent)}</span></a>`).join("");
+  const links=[...$("#nav").querySelectorAll("a")];
+  const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ links.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+e.target.id)) } }) },{rootMargin:"-30% 0px -60% 0px"});
+  secs.forEach(s=>io.observe(s));
+})();
+
+/* ---- checklist ---- */
+const monthChip=m=>{ const cls={actual:"good",accrued:"warn",estimated:"serious",none:"none",zero:"none"}[m.status]||"none"; const lbl={actual:"actual",accrued:"accrued",estimated:"estimated",none:"no record",zero:"zero"}[m.status]; return `<span class="month" title="${esc(m.month)}: ${lbl}${m.kwh?`, ${fmt(m.kwh)} kWh`:""}"><span class="dot ${cls}"></span>${esc(m.month)} <span class="kwh">${m.kwh?fmt(m.kwh):"—"}</span> <span class="faint">${lbl}</span></span>` };
+function card(r){
+  const s=rowState(r), st=cardStatus(r);
+  const stamp=k=>s[k+"_at"]?`<span class="when">${esc(s[k+"_at"])}</span>`:"";
+  const prior=r.certs_n>0?`<div class="note hist"><b>Historical LGC account${r.certs_n>1?"s":""} here:</b> <span class="mono">${esc(r.certs)}</span> — holds 2025-and-earlier data, leave as is; the new account sits beside it.</div>`:"";
+  const hist=r.src_history==="Yes"?`<div class="note warn"><b>Source has data before 1 Jul 26.</b> Date-bound the virtual meter (effective from 2026-07-01) so it doesn't generate certificates for earlier years.</div>`:"";
+  const also=r.also_link?`<div class="note"><b>Also link when live:</b> ${esc(r.also_link)}</div>`:"";
+  const isLive=LIVE.has(r.new_acct);
+  const liveChip=isLive?`<span class="chip good" title="Exists in the ${esc(DATA.extract_date)} accounts extract"><span class="dot good"></span>built</span>`:"";
+  const dual=r.other_on_nmi?`<div class="note warn"><b>Another account is still recording on this NMI:</b> <span class="mono">${esc(r.other_on_nmi)}</span> — a double count, and not the meter's source. Close it off from <a href="#dual">the double count list</a>.</div>`:"";
+  const all=[["Location",r.location],["Location ref",r.lref],["Account style","Certificates - Location - kWh"],["Account number",r.new_acct],["Account reference",r.nmi],["Supplier",r.new_sup],["Reader","(blank)"],["Opened On",r.opened_on],["Virtual meter source",r.src_acct+" at 100%"]].map(([k,v])=>`${k}: ${v}`).join("\n");
+  const open=OPEN.has(r.nmi);
+  return `<article class="card s-${st}${open?" open":""}" data-nmi="${esc(r.nmi)}">
+    <div class="hd" role="button" tabindex="0" aria-expanded="${open}"><span class="caret">&#9654;</span><div style="flex:1;min-width:0"><h4>${esc(r.location)}</h4><div class="sub">${esc(r.site||"")}${r.site?" · ":""}${esc(r.address||"")}</div></div>
+      <div class="chips">${liveChip}${r.src_small?`<span class="chip warn" title="Envizi styles the source Electricity Small Market. That is the meter class; the site is supplied as large market, so it stays in scope."><span class="dot warn"></span>small-market meter</span>`:""}<span class="chip state">${esc(r.state)}</span><span class="chip retailer">${esc(r.retailer)}</span></div></div>
+    <div class="peek"><span class="val">${esc(r.new_acct)}</span><button class="copy" data-copy="${esc(all)}">copy all fields</button></div>
+    <div class="body">
+      <div class="field"><div class="k">New account number</div><div class="v"><span class="val">${esc(r.new_acct)}</span><button class="copy" data-copy="${esc(r.new_acct)}">copy</button></div></div>
+      <div class="field"><div class="k">Source account (virtual meter)</div><div class="v"><span class="val">${esc(r.src_acct)}</span><button class="copy" data-copy="${esc(r.src_acct)}">copy</button></div></div>
+      <div class="field"><div class="k">Account reference · NMI</div><div class="v"><span class="val">${esc(r.nmi)}</span><button class="copy" data-copy="${esc(r.nmi)}">copy</button></div></div>
+      <div class="field"><div class="k">Supplier</div><div class="v"><span class="val">${esc(r.new_sup)}</span><button class="copy" data-copy="${esc(r.new_sup)}">copy</button> <span class="faint">reader blank</span></div></div>
+      <div class="field"><div class="k">Opened On</div><div class="v"><span class="val">${esc(r.opened_on)}</span><button class="copy" data-copy="${esc(r.opened_on)}">copy</button></div></div>
+      <div class="field"><div class="k">Account style</div><div class="v"><span class="val">Certificates - Location - kWh</span><button class="copy" data-copy="Certificates - Location - kWh">copy</button></div></div>
+      <div class="field"><div class="k">Location · ref</div><div class="v"><span class="val">${esc(r.location)}</span><button class="copy" data-copy="${esc(r.location)}">copy</button> <span class="faint">${esc(r.lref||"—")}</span></div></div>
+      <div class="field"><div class="k">Source style · Business unit</div><div class="v"><span style="font-family:var(--body)">${esc(r.matched_style||"")} · ${esc(r.bu||"—")}</span></div></div>
+      <div class="field" style="align-self:end"><button class="btn small copyall" data-copy="${esc(all)}">Copy all fields</button></div>
+    </div>
+    <div class="months" title="Source account's electricity records in the Jun–Aug 26 summary">${r.months.map(monthChip).join("")}</div>
+    ${hist}${prior}${dual}${also}
+    <div class="checks">
+      <label><input type="checkbox" data-k="created" ${s.created?"checked":""}><span>Created empty${stamp("created")}</span></label>
+      <label><input type="checkbox" data-k="linked" ${s.linked?"checked":""}><span>Linked as virtual meter${stamp("linked")}</span></label>
+      <label><input type="checkbox" data-k="verified" ${s.verified?"checked":""}><span>Verified kWh &amp; CO2e${stamp("verified")}</span></label>
+    </div>
+    <div class="notes"><textarea placeholder="Notes for this site…" aria-label="Notes">${esc(s.notes||"")}</textarea></div>
+  </article>`;
+}
+function nextUp(){ return creates.find(r=>cardStatus(r)!=="done") }
+function goToNext(){
+  const r=nextUp(); if(!r) return;
+  OPEN.add(r.nmi); renderCards();
+  const el=document.querySelector(`#cards .card[data-nmi="${CSS.escape(r.nmi)}"]`);
+  if(el){ el.scrollIntoView({behavior:"smooth",block:"center"}); el.classList.add("just-done"); setTimeout(()=>el.classList.remove("just-done"),600); }
+}
+function renderNextUp(){
+  const left=creates.filter(r=>cardStatus(r)!=="done").length, r=nextUp();
+  $("#nextUp").innerHTML = r
+    ? `<span>Next up: <b>${esc(r.location)}</b></span><span class="faint small">${left} left</span><button class="btn primary" id="btnNext">Take me there</button>`
+    : `<span>&#127881; <b>All ${creates.length} made and verified.</b></span><span class="faint small">Nothing left in this section.</span>`;
+  const b=$("#btnNext"); if(b) b.addEventListener("click",goToNext);
+}
+function renderCards(){
+  const q=$("#q").value.trim().toLowerCase(), fs=$("#fState").value, fr=$("#fRetailer").value, fh=$("#fHist").value, fp=$("#fPrior").value, fst=$("#fStatus").value;
+  const fd=$("#fDual").value;
+  const list=creates.filter(r=>(!fs||r.state===fs)&&(!fr||r.retailer===fr)&&(!fh||r.src_history===fh)&&(!fp||(fp==="yes"?r.certs_n>0:r.certs_n===0))&&(!fst||cardStatus(r)===fst)&&(!fd||(fd==="dual"?!!r.other_on_nmi:!!r.src_small))
+    &&(!q||[r.location,r.site,r.address,r.nmi,r.account,r.src_acct,r.new_acct,r.certs].join(" ").toLowerCase().includes(q)));
+  $("#checklistCount").textContent=list.length===creates.length?`${creates.length} to make`:`${list.length} of ${creates.length} shown`;
+  if(!list.length){ $("#cards").innerHTML=`<div class="empty"><span class="big">&#128269;</span>Nothing matches those filters. <button class="btn" onclick="document.getElementById('btnClear').click()">Clear them</button></div>`; renderNextUp(); return }
+  const order=["NSW","ACT","QLD","VIC","SA","TAS","WA","NT"]; const groups={};
+  list.forEach(r=>(groups[r.state]=groups[r.state]||[]).push(r));
+  $("#cards").innerHTML=order.filter(s=>groups[s]).map(s=>{
+    const done=groups[s].filter(r=>cardStatus(r)==="done").length;
+    return `<div class="stategroup"><h3>${esc(STATE_NAMES[s]||s)} <span class="n">${done===groups[s].length?"&#10003; all done":`${done} of ${groups[s].length} done`}</span></h3><div class="cards">${groups[s].sort((a,b)=>a.location.localeCompare(b.location)).map(card).join("")}</div></div>` }).join("");
+  renderNextUp();
+}
+$("#cards").addEventListener("click",e=>{
+  const hd=e.target.closest(".hd"); if(!hd||e.target.closest("button")) return;
+  const art=hd.closest(".card"), n=art.dataset.nmi;
+  OPEN.has(n)?OPEN.delete(n):OPEN.add(n);
+  art.classList.toggle("open"); hd.setAttribute("aria-expanded",OPEN.has(n));
+});
+$("#cards").addEventListener("keydown",e=>{
+  if(!e.target.classList.contains("hd")||(e.key!==" "&&e.key!=="Enter")) return;
+  e.preventDefault(); e.target.click();
+});
+$("#cards").addEventListener("change",e=>{
+  const art=e.target.closest(".card"); if(!art) return; const nmi=art.dataset.nmi; state[nmi]=state[nmi]||{};
+  const was=cardStatus(rows.find(r=>r.nmi===nmi)||{nmi});
+  if(e.target.matches("input[type=checkbox]")){ const k=e.target.dataset.k; state[nmi][k]=e.target.checked; state[nmi][k+"_at"]=e.target.checked?new Date().toLocaleDateString("en-AU",{day:"2-digit",month:"short",year:"numeric"}):null; if(k==="verified"&&e.target.checked){ state[nmi].created=true; state[nmi].linked=true; } }
+  save(); renderCards(); updateProgress();
+  const now=cardStatus(rows.find(r=>r.nmi===nmi)||{nmi});
+  if(was!=="done"&&now==="done"){ const el=document.querySelector(`#cards .card[data-nmi="${CSS.escape(nmi)}"]`);
+    if(el){ el.classList.add("just-done"); setTimeout(()=>el.classList.remove("just-done"),600) } toast("Nice — that one's done"); }
+});
+$("#cards").addEventListener("input",e=>{ if(e.target.matches("textarea")){ const nmi=e.target.closest(".card").dataset.nmi; state[nmi]=state[nmi]||{}; state[nmi].notes=e.target.value; save(); } });
+document.addEventListener("click",e=>{ const b=e.target.closest(".copy,.copyall"); if(!b) return; const v=b.dataset.copy;
+  navigator.clipboard?.writeText(v).then(()=>toast(b.classList.contains("copyall")?"All fields copied":"Copied "+v)).catch(()=>toast("Copy blocked by the browser")); });
+["#q","#fState","#fRetailer","#fHist","#fPrior","#fStatus","#fDual"].forEach(s=>$(s).addEventListener("input",renderCards));
+$("#btnClear").addEventListener("click",()=>{ ["#q","#fState","#fRetailer","#fHist","#fPrior","#fStatus","#fDual"].forEach(s=>$(s).value=""); renderCards(); });
+(function fillFilters(){ const add=(sel,vals)=>vals.forEach(v=>{ const o=document.createElement("option"); o.value=v; o.textContent=v; $(sel).appendChild(o) });
+  add("#fState",[...new Set(creates.map(r=>r.state))].sort()); add("#fRetailer",[...new Set(creates.map(r=>r.retailer))].sort()); })();
+
+/* ---- LGCS table ---- */
+(function lgcs(){
+  const byLoc={}; creates.forEach(r=>(byLoc[r.location]=byLoc[r.location]||[]).push(r.new_acct));
+  $("#lgcsTable tbody").innerHTML=DATA.lgcs.map(l=>{ const s=state["lgc:"+l.account]||{}; const note=l.own==="N"?`On a different NMI to the register's (${esc(l.nmis)})`:""; return `<tr class="${s.seen?"reviewed":""}" data-acct="${esc(l.account)}"><td><input type="checkbox" ${s.seen?"checked":""} aria-label="Looked at ${esc(l.account)}"></td><td class="mono">${esc(l.account)}</td><td>${esc(l.location)}${note?`<br><span class="small muted">${note}</span>`:""}</td><td class="num">${esc(l.created)}</td><td class="mono">${esc(l.nmis)}</td><td class="mono small">${(byLoc[l.location]||[]).map(esc).join("<br>")}</td></tr>` }).join("");
+  $("#lgcsTable").addEventListener("change",e=>{ const tr=e.target.closest("tr"); if(!tr) return; const k="lgc:"+tr.dataset.acct; state[k]=state[k]||{}; state[k].seen=e.target.checked; save(); tr.classList.toggle("reviewed",e.target.checked); updateProgress(); });
+})();
+
+/* ---- excluded tables ---- */
+(function excluded(){
+  $("#alintaTable tbody").innerHTML=rows.filter(r=>r.decision===D_GREEN).map(r=>{ const g=r.green_months.filter(m=>m.month!=="Jun 26"); const kwh=g.reduce((a,m)=>a+m.kwh,0), co2=g.reduce((a,m)=>a+m.co2,0); return `<tr><td>${esc(r.location)}</td><td class="mono">${esc(r.nmi)}</td><td class="num">${fmt(kwh)}</td><td class="num">${co2.toFixed(1)}</td></tr>` }).join("");
+  $("#namedTable tbody").innerHTML=rows.filter(r=>r.decision===D_NAMED).map(r=>`<tr><td>${esc(r.location)}</td><td class="mono">${esc(r.nmi)}</td><td class="small">${esc(r.reason)}</td></tr>`).join("");
+})();
+
+/* ---- double count todo ---- */
+const DUAL=DATA.dual||[];
+const DUAL_STEPS=[
+  ["checked","Contracted retailer checked","Column M of the Site Register"],
+  ["closed","Old account closed","{CLOSEHINT}"],
+  ["accruals","Duplicated months cleared","{SURPLUS} kWh off {CLOSEACCT}"],
+  ["rechecked","Re-checked in a fresh export","One account per month, no overlap"]
+];
+const dualState=d=>state["dual:"+d.nmi]||{};
+const dualDone=d=>{ const st=dualState(d); return DUAL_STEPS.every(([k])=>st[k]) };
+const dualStatus=d=>{ const st=dualState(d); if(dualDone(d)) return "done"; return DUAL_STEPS.some(([k])=>st[k])?"progress":"todo" };
+const kindDot={actual:"good",accrued:"warn",estimated:"serious",none:"none"};
+const kindLbl={actual:"actual",accrued:"accrued",estimated:"estimated",none:"no record"};
+function laneMonths(o){ return o.months.map(m=>`<li><span><span class="dot ${kindDot[m.kind]||"none"}"></span> ${esc(m.month)}</span><span><span class="n">${m.kwh?fmt(m.kwh):"—"}</span> <span class="tag">${esc(kindLbl[m.kind]||m.kind)}</span></span></li>`).join("") }
+function dualCard(d){
+  const st=dualState(d), status=dualStatus(d);
+  const cert=(creates.find(r=>r.nmi===d.nmi)||{}).new_acct||"certificate account";
+  const stamp=k=>st[k+"_at"]?`<span class="when">${esc(st[k+"_at"])}</span>`:"";
+  const closeHint=d.close_date?`Replaced On = ${d.close_date_label}`:"Match how its siblings were closed";
+  const fill=h=>h.replace("{SURPLUS}",fmt(d.surplus_kwh)).replace("{CERT}",cert).replace("{CLOSEHINT}",closeHint).replace("{CLOSEACCT}",d.close.account);
+  const checks=DUAL_STEPS.map(([k,lbl,hint])=>`<label><input type="checkbox" data-k="${k}" ${st[k]?"checked":""}><span>${esc(lbl)}<span class="hint">${esc(fill(hint))}</span>${stamp(k)}</span></label>`).join("");
+  return `<article class="card s-${status}" data-nmi="${esc(d.nmi)}">
+    <div class="hd"><div><h4>${esc(d.location)}</h4><div class="sub">${esc(d.site||"")} · NMI <span class="mono">${esc(d.nmi)}</span></div></div>
+      <div class="chips"><span class="chip state">${esc(d.state)}</span><span class="chip good"><span class="dot good"></span>col M: ${esc(d.contracted)}</span></div></div>
+    <div class="sidebyside">
+      <div class="lane close"><span class="lbl">Close${d.close_date_label?" &mdash; "+esc(d.close_date_label):""}</span><div class="acctrow"><span class="acct">${esc(d.close.account)}</span><button class="copy" data-copy="${esc(d.close.account)}">copy</button></div>
+        <div class="meta">${esc(d.close.supplier)} · ${esc(d.close.style)}<br>Opened ${esc(d.close.opened)} · still open</div>
+        <ul>${laneMonths(d.close)}</ul></div>
+      <div class="lane keep"><span class="lbl">Keep &mdash; the meter's source</span><div class="acctrow"><span class="acct">${esc(d.keep.account)}</span><button class="copy" data-copy="${esc(d.keep.account)}">copy</button></div>
+        <div class="meta">${esc(d.keep.supplier)} · ${esc(d.keep.style)}<br>Opened ${esc(d.keep.opened)}</div>
+        <ul>${laneMonths(d.keep)}</ul></div>
+    </div>
+    <div class="note warn"><b>Duplicated on this NMI:</b> ${fmt(d.surplus_kwh)} kWh and ${Number(d.surplus_co2).toFixed(2)} tCO<sub>2</sub>e across Jul&ndash;Aug, on top of what the source account already reports.</div>
+    <div class="note"><b>Register says:</b> tendered to ${esc(d.tender)}, contracted to <b>${esc(d.contracted)}</b>, ${esc(d.contract_start_label)} to ${esc(d.contract_end_label)} (${esc(d.term)}). New certificate account for this site: <span class="mono">${esc(cert)}</span>.</div>
+    <div class="checks two">${checks}</div>
+    <div class="notes"><textarea placeholder="Notes for this NMI…" aria-label="Notes">${esc(st.notes||"")}</textarea></div>
+  </article>`;
+}
+function renderDual(){
+  const ret=DUAL.filter(d=>d.kind==="retailer"), dup=DUAL.filter(d=>d.kind!=="retailer");
+  $("#dualCardsRet").innerHTML=ret.map(dualCard).join("");
+  $("#dualCardsDup").innerHTML=dup.map(dualCard).join("");
+  $("#dualNRet").textContent=`${ret.filter(dualDone).length} of ${ret.length} done`;
+  $("#dualNDup").textContent=`${dup.filter(dualDone).length} of ${dup.length} done`;
+  const done=DUAL.filter(dualDone).length;
+  $("#dualCount").textContent=`${done} of ${DUAL.length} closed off`;
+  $("#dualKwh").textContent=fmt(DUAL.reduce((a,d)=>a+d.surplus_kwh,0));
+  $("#dualCo2").textContent=DUAL.reduce((a,d)=>a+d.surplus_co2,0).toFixed(0);
+}
+["#dualCardsRet","#dualCardsDup"].forEach(sel=>{
+  $(sel).addEventListener("change",e=>{
+    const art=e.target.closest(".card"); if(!art||!e.target.matches("input[type=checkbox]")) return;
+    const k="dual:"+art.dataset.nmi; state[k]=state[k]||{};
+    const f=e.target.dataset.k; state[k][f]=e.target.checked;
+    state[k][f+"_at"]=e.target.checked?new Date().toLocaleDateString("en-AU",{day:"2-digit",month:"short",year:"numeric"}):null;
+    save(); renderDual(); updateProgress();
+  });
+  $(sel).addEventListener("input",e=>{ if(e.target.matches("textarea")){ const k="dual:"+e.target.closest(".card").dataset.nmi; state[k]=state[k]||{}; state[k].notes=e.target.value; save(); } });
+});
+
+/* ---- 3 · temporary accounts, to be remade later ---- */
+const WAIT=DATA.waiting||[];
+const DUALSET=new Set((DATA.dual||[]).map(d=>d.nmi));
+const WAIT_STEPS=[
+  ["created","Created empty","Same fields as section 2"],
+  ["linked","Linked as virtual meter","Source: {SRC}"],
+  ["verified","Verified kWh &amp; CO2e",""],
+  ["remade","Remade on {WANT}","Delete this one first — the name won't match"]
+];
+const waitState=w=>state["wait:"+w.nmi]||{};
+const waitBuilt=w=>{ const st=waitState(w); return !!(st.verified||(st.created&&st.linked)) };
+const waitStatus=w=>{ const st=waitState(w); if(st.remade) return "done"; if(waitBuilt(w)) return "progress"; return st.created||st.linked?"progress":"todo" };
+function waitCard(w){
+  const st=waitState(w), status=waitStatus(w);
+  const stamp=k=>st[k+"_at"]?`<span class="when">${esc(st[k+"_at"])}</span>`:"";
+  const fill=t=>t.replace("{SRC}",w.account).replace("{WANT}",w.expected_supplier);
+  const checks=WAIT_STEPS.map(([k,lbl,hint])=>`<label><input type="checkbox" data-k="${k}" ${st[k]?"checked":""}><span>${fill(lbl)}${hint?`<span class="hint">${esc(fill(hint))}</span>`:""}${stamp(k)}</span></label>`).join("");
+  const all=[["Location",w.location],["Location ref",w.lref],["Account style","Certificates - Location - kWh"],
+    ["Account number",w.new_acct],["Account reference",w.nmi],["Supplier",w.new_sup],["Reader","(blank)"],
+    ["Opened On",w.opened_on],["Virtual meter source",w.account+" at 100%"]].map(([k,v])=>`${k}: ${v}`).join("\n");
+  const hist=w.src_history==="Yes"?`<div class="note warn"><b>Source has data before 1 Jul 26.</b> Opened On 2026-07-01 keeps the meter inside the renewal.</div>`:"";
+  const prior=w.certs_n>0?`<div class="note hist"><b>Historical LGC account${w.certs_n>1?"s":""} here:</b> <span class="mono">${esc(w.certs)}</span> — leave as is.</div>`:"";
+  const dual=DUALSET.has(w.nmi)?`<div class="note warn">This NMI also has an account to close in <a href="#close">section 1</a>.</div>`:"";
+  return `<article class="card s-${status}" data-nmi="${esc(w.nmi)}">
+    <div class="hd"><div style="flex:1;min-width:0"><h4>${esc(w.location)}</h4><div class="sub">${esc(w.site||"")} · NMI <span class="mono">${esc(w.nmi)}</span></div></div>
+      <div class="chips">${w.parked?`<span class="chip warn" title="The ${esc(w.expected_supplier)} account exists at Unallocated Accounts — allocate it and you can skip the rework"><span class="dot warn"></span>allocate first</span>`:""}<span class="chip state">${esc(w.state)}</span><span class="chip retailer">${esc(w.contracted)}</span></div></div>
+    <div class="body">
+      <div class="field"><div class="k">New account number <span class="faint">temporary</span></div><div class="v"><span class="val">${esc(w.new_acct)}</span><button class="copy" data-copy="${esc(w.new_acct)}">copy</button></div></div>
+      <div class="field"><div class="k">Source — what it records today</div><div class="v"><span class="val">${esc(w.account)}</span><button class="copy" data-copy="${esc(w.account)}">copy</button> <span class="faint">${esc(w.supplier)}</span></div></div>
+      <div class="field"><div class="k">Account reference · NMI</div><div class="v"><span class="val">${esc(w.nmi)}</span><button class="copy" data-copy="${esc(w.nmi)}">copy</button></div></div>
+      <div class="field"><div class="k">Supplier · Opened On</div><div class="v"><span class="val">${esc(w.new_sup)}</span> <span class="faint">${esc(w.opened_on)}</span></div></div>
+      <div class="field"><div class="k">Location · ref</div><div class="v"><span class="val">${esc(w.location)}</span> <span class="faint">${esc(w.lref||"—")}</span></div></div>
+      <div class="field"><div class="k">Waiting on</div><div class="v"><span class="val">${esc(w.expected_supplier)}</span> <span class="faint">${w.parked?"parked at Unallocated Accounts":"not created yet"}</span></div></div>
+      <div class="field" style="grid-column:1/-1"><button class="btn small copyall" data-copy="${esc(all)}">Copy all fields</button>${w.parked?` <button class="copy" data-copy="${esc(w.parked)}">copy the account to allocate: ${esc(w.parked)}</button>`:""}</div>
+    </div>
+    <div class="months" title="What the source account records">${(w.months||[]).map(monthChip).join("")}</div>
+    ${hist}${prior}${dual}
+    <div class="checks two">${checks}</div>
+    <div class="notes"><textarea placeholder="Notes for this NMI…" aria-label="Notes">${esc(st.notes||"")}</textarea></div>
+  </article>`;
+}
+function renderWait(){
+  $("#waitCards").innerHTML=WAIT.map(waitCard).join("");
+  const built=WAIT.filter(waitBuilt).length, remade=WAIT.filter(w=>waitState(w).remade).length;
+  $("#waitCount").textContent=`${built} of ${WAIT.length} built`;
+  $("#delCount").textContent=`${remade} of ${WAIT.length} remade`;
+  $("#delTable tbody").innerHTML=WAIT.map(w=>{ const st=waitState(w);
+    return `<tr class="${st.remade?"reviewed":""}" data-nmi="${esc(w.nmi)}"><td><input type="checkbox" data-k="remade" ${st.remade?"checked":""} aria-label="Remade ${esc(w.new_acct)}"></td>
+      <td>${esc(w.location)}<br><span class="small muted">${esc(w.state)} · ${esc(w.nmi)}</span></td>
+      <td class="mono small">${esc(w.new_acct)}<button class="copy" data-copy="${esc(w.new_acct)}">copy</button></td>
+      <td class="mono small">${esc(w.account)}<br><span class="faint">${esc(w.supplier)}</span></td>
+      <td>${esc(w.expected_supplier)}<br><span class="small muted">${w.parked?`parked: <span class="mono">${esc(w.parked)}</span>`:"not created yet"}</span></td>
+      <td>${waitBuilt(w)?'<span class="chip good"><span class="dot good"></span>built</span>':'<span class="chip">not yet</span>'}</td></tr>` }).join("");
+}
+function waitChange(e){
+  const host=e.target.closest("[data-nmi]"); if(!host||!e.target.matches("input[type=checkbox]")) return;
+  const k="wait:"+host.dataset.nmi; state[k]=state[k]||{};
+  const f=e.target.dataset.k; state[k][f]=e.target.checked;
+  state[k][f+"_at"]=e.target.checked?new Date().toLocaleDateString("en-AU",{day:"2-digit",month:"short",year:"numeric"}):null;
+  if(f==="verified"&&e.target.checked){ state[k].created=true; state[k].linked=true }
+  save(); renderWait(); updateProgress();
+}
+$("#waitCards").addEventListener("change",waitChange);
+$("#delTable").addEventListener("change",waitChange);
+$("#waitCards").addEventListener("input",e=>{ if(e.target.matches("textarea")){ const k="wait:"+e.target.closest(".card").dataset.nmi; state[k]=state[k]||{}; state[k].notes=e.target.value; save(); } });
+
+/* ---- NZ ---- */
+(function nz(){
+  $("#nzTable tbody").innerHTML=DATA.nz.meridian_uncovered.map(([icp,loc])=>`<tr><td class="mono">${esc(icp)}</td><td>${esc(loc)}</td></tr>`).join("");
+})();
+
+/* ---- export / import / reset ---- */
+function toast(t){ const el=$("#toast"); el.textContent=t; el.classList.add("show"); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove("show"),1800) }
+$("#btnExport").addEventListener("click",()=>{ $("#dlgText").value=JSON.stringify(state); $("#dlg").showModal(); });
+$("#dlgCopy").addEventListener("click",()=>navigator.clipboard?.writeText($("#dlgText").value).then(()=>toast("Progress copied")));
+$("#dlgRestore").addEventListener("click",()=>{ try{ const o=JSON.parse($("#dlgText").value); if(typeof o!=="object") throw 0; state=o; save(); renderCards(); renderDual(); renderWait(); updateProgress(); document.querySelectorAll("#lgcsTable tbody tr").forEach(tr=>{ const s=state["lgc:"+tr.dataset.acct]||{}; tr.querySelector("input").checked=!!s.seen; tr.classList.toggle("reviewed",!!s.seen) }); $("#dlg").close(); toast("Progress restored") }catch(e){ toast("That text isn't saved progress") } });
+$("#dlgClose").addEventListener("click",()=>$("#dlg").close());
+$("#btnPrint").addEventListener("click",()=>window.print());
+$("#btnReset").addEventListener("click",()=>{ if(confirm("Clear every tick and note on this page?")){ state={}; save(); renderCards(); renderDual(); renderWait(); updateProgress(); document.querySelectorAll("#lgcsTable tbody tr").forEach(tr=>{ tr.querySelector("input").checked=false; tr.classList.remove("reviewed") }); toast("Progress cleared") } });
+
+document.addEventListener("keydown",e=>{
+  const typing=/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
+  if(e.key==="/"&&!typing){ e.preventDefault(); $("#q").focus(); $("#q").select(); }
+  else if(e.key==="n"&&!typing){ e.preventDefault(); goToNext(); }
+  else if(e.key==="Escape"){ if(typing) e.target.blur(); $("#btnClear").click(); }
+});
+renderCards(); renderDual(); renderWait(); updateProgress();
+</script>
+</body>
+</html>
