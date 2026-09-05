@@ -14,8 +14,10 @@ FY26–28 renewal agreements, and everything behind them.
 | `ElectricityEnviziSummaryjunejulyaug26.xlsx` | The Jun–Aug 26 Envizi summary — kWh, actual/accrued split, cost, CO2e and the green component. |
 
 The accounts and locations extracts it reads are in `../FY27/` (`Extract_for_Accounts 05 Sep 26.csv`,
-`Extract_for_Locations 26 Aug 26.csv`). The 4 Sep 26 export used to verify the first two accounts is
-`../Electricity download after bathurst and mogo virual accounts.xlsx`.
+`Extract_for_Locations 26 Aug 26.csv`). Two Jun–Aug 26 energy exports sit one folder up: `../Electricity
+download after bathurst and mogo virual accounts.xlsx` (4 Sep 26, the first two accounts) and `../Electricity
+download after the first Claude in Chrome batches.xlsx` (taken between 4 and 5 Sep 26, once 42 accounts were
+live — the one the guide page now reads its month figures from).
 
 ## Scope
 
@@ -60,10 +62,13 @@ For Engie and Origin, yes: `Rates & Source Data` prices both renewal contracts w
 Shell (TAS) contracts are modelled as an all-in delivered rate with no separate LGC line; Category
 Management confirms they are renewable, and the Alinta accounts already show 100% green kWh in Envizi.
 
-## Progress — the first two, verified
+## Progress — 42 of the 43 verified against the export
 
 `50002617964_NAAA00AC25_CERTS` (Asphalt Prod - Bathurst) and `50002769514_4001127731_CERTS`
-(Asphalt Prod - Mogo) were created on 4 Sep 26. Against the export taken straight after:
+(Asphalt Prod - Mogo) were created on 4 Sep 26, and the rest of the 43 followed in batches through Claude in
+Chrome. The second export, taken after those batches, carries 42 of the 43 accounts the 05 Sep extract lists,
+and every one of them mirrors its source exactly in July and August with no June row. Bathurst's figures
+have not moved since the first export (53,778 / 41,470). Against the first export:
 
 - **Mirroring is exact** — certificate kWh equals source kWh in every month, and it follows the source
   when a bill replaces an accrual (Bathurst's August moved from an accrued 49,402 to an actual 41,470).
@@ -76,6 +81,21 @@ Management confirms they are renewable, and the Alinta accounts already show 100
 - **Mogo settled the scope rule** — that one was built on `50002769514_4001127731`, which Envizi styles
   small market. Querying it produced the answer quoted above, so the account is right where it is and
   the rest of the small-market-styled sites stayed in scope.
+
+**Mogo needs a look before the last batch.** `50002769514_4001127731_CERTS` was in the first export with
+July and August data, but it is in neither the second export nor the 05 Sep extract. What the extract has
+instead is `50002617992_4204072845_CERTS` — the other Mogo NMI, opened 01 Jul 2026 — and that one has no
+rows in the second export, so it holds no data. Either the first account was renamed onto the wrong NMI
+and unlinked, or it was deleted and the 4204072845 one created empty in its place. Both NMIs are in scope
+and both need an account, so the outcome wanted is: `50002617992_4204072845_CERTS` linked to
+`50002617992_4204072845` (it is empty, so it can be), and `50002769514_4001127731_CERTS` created again.
+Prompt 0b in the prompts file reads the state; prompt 1 has the Mogo card.
+
+**What the second export confirms is unchanged.** None of the 14 section 1 accounts is closed (Traralgon
+still reads 30 Oct 2026); no Engie account has appeared on any of the 9 Queensland NMIs; and the
+certificate accounts are still on the 24-25 factors (NSW/ACT −0.66, QLD −0.71, TAS −0.15) against
+electricity on 25-26 (0.64, 0.67, 0.20), so Bathurst still nets −1.08 t in July. Only Victoria has a 25-26
+certificate factor (−0.78, matching its scope 2). The 25-26 set for the other states is a later session.
 
 ## How the new accounts are structured
 
@@ -119,7 +139,7 @@ column switches to reuse.
 
 On 14 NMIs a second active account is still recording the months the source account already covers, so
 the site's electricity is counted twice before any certificate is applied. Together they carry
-**1,159,261 kWh / 684 tCO₂e** of July and August on top of what the source accounts report. Two causes:
+**1,223,122 kWh / 734 tCO₂e** of July and August on top of what the source accounts report. Two causes:
 
 **Retailer switched, old account left open (12).** These moved to Engie on 1 Jul 26 and the previous
 retailer's account was never closed, so it keeps accruing while the Engie account bills the actuals:
@@ -129,7 +149,7 @@ already carries a Replaced On — but of **30 Oct 2026**, a future date, so it i
 needs moving back to 30 Jun 26. (A future Replaced On used to read as closed in my checks. It doesn't now.) I checked **column M (Contracted
 Retailer)** first and Engie is correct on every one — tendered to Origin, contracted to Engie,
 1 Jul 26 to 30 Jun 28, 24 months. The old account gets `Replaced On` = **30 June 2026**.
-Worth 958,192 kWh / 549 tCO₂e.
+Worth 1,022,053 kWh / 599 tCO₂e.
 
 **Second connector account on the same NMI (2).** Gympie and Archerfield (406) each carry a second
 CS Energy account created by the Utilities Connector, accruing with no Opened On and no actuals. Nine of
@@ -164,8 +184,17 @@ those:
 The nine that remain are Queensland sites contracted to Engie with no Engie account at all — the
 connector has not switched them. Gympie and Archerfield are also in section 1, where their duplicate
 CS Energy account needs closing regardless. **Maryborough QGGG000320 is on hold**, not temporary: its CS
-Energy account was closed at 30 Jun 26 between the two extracts and no Engie account exists, so nothing
-is recording July or August there and there is nothing for a virtual account to follow.
+Energy account was closed at 30 Jun 26 between the two extracts and no Engie account exists, so no account
+is recording July or August there and there is nothing for a virtual account to follow. The site is not
+idle, though — its interval meter reads 12,413 kWh in July and 10,262 in August — so the consumption is
+real and simply uncounted until Engie's account arrives.
+
+**Maryborough QGGG000010 mirrors a gross figure.** The same location carries a Downer deduction account
+(`electricity deduction_CQMS foundry meter_Maryborough`) of −141,380 kWh in July and −146,260 in August,
+so the location's own consumption is about half the 277,212 kWh the certificate account copies. The
+contract buys certificates for the whole NMI, but the inventory nets the foundry out — whether the
+virtual account should follow the net (source less deduction) is a question for Category Management
+before the FY27 numbers are relied on. It is the largest of the 43 by a wide margin.
 
 In the workbook these rows carry the decision `Create - temporary, retailer's account not in Envizi yet`.
 They are shaded amber on the Review tab and they are on the load tab and `Manual Setup Checklist` with
@@ -177,8 +206,19 @@ The Jun–Aug 26 energy export carries bare-NMI rows with supplier `EnergyAction
 the accounts extract. They are **NEMMCO interval meters** (`Item Type` = Meter, style *NEMMCO 12 KWH
 Meter with Sub-Metering*), the metering feed behind each account, tied to it by `Account_Meter_Link`.
 They are not double counts and take no part in scope or source selection — the review reads accounts
-only. One is worth a look on its own: the Wingfield (523) meter reads 472,586 kWh in July against the
-account's 118,252, a fourfold gap between meter and bill.
+only. One is worth a look on its own: the Wingfield (523) meter reads 236,293 kWh in July against the
+Engie account's 118,252 — twice the bill, and the same twofold gap in June (222,315 against Origin's
+111,209) and August. The "fourfold" I had earlier was the export listing that meter twice (identical rows,
+one `Account_Meter_Link`), so it is a doubled row, not a doubled reading. At every other Engie site with an
+interval meter (Somerton, Derrimut, Bayswater, Wodonga, Largs Bay) the meter and the Engie account agree
+to the kWh, which makes Wingfield the odd one out.
+
+Two more things the export shows at in-scope locations. **Roads - Tamworth's register NMI `4001158058`
+has recorded 0 kWh in every month since June**, meter and account alike, while the Tamworth location's
+electricity (43,191 kWh in July) sits on `A-0B2330E0_4001174306`, an Origin account on an NMI that is not
+in the register. Its certificate account is built and mirrors zero. And several in-scope locations carry
+small AGL or Origin accounts on other NMIs (Shepparton ×3, Wingfield, Mulgrave, Hexham, Chinderah) that
+the register does not list — small market supply outside the renewal, left alone.
 
 ## The site register, mapped to Envizi
 
@@ -219,12 +259,14 @@ contract has not started, and for a site whose consumption sits on a per-locatio
 
 ## Still open
 
-- The NSW 25-26 LGC emission factor — settle before linking the rest.
+- The 25-26 LGC emission factors for NSW/ACT/QLD/SA/TAS/NT/WA — a later session; prompt 3 is ready.
+- Mogo: read the two certificate accounts (prompt 0b), link the empty 4204072845 one, remake 4001127731.
 - Section 2: the last 17 permanent accounts.
 - Section 1: close the 14 old accounts (Traralgon's Replaced On back from 30 Oct to 30 Jun 26), and
   confirm the date for the two CS Energy ones.
 - Section 3: chase the 9 Queensland sites still on CS Energy, then delete and remake the temporary
   accounts against the right source. Maryborough QGGG000320 has nothing recording at all — raise it.
-- The Wingfield meter reading four times its account.
+- The Wingfield meter reading twice its account, and Tamworth's register NMI reading nothing.
+- Maryborough QGGG000010: gross or net of the CQMS foundry deduction.
 - NZ, once the Ecotricity switch is confirmed.
 - The Envizi Account Style Link for the certificates style, only if the load tab is ever uploaded.

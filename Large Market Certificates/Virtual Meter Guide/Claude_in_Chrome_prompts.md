@@ -5,6 +5,8 @@ run at least once against the real screens; the quirks noted inside them are rea
 while it works — it only sees the active tab.
 
 Progress as of the 05 Sep 26 extract: **43 of 60** permanent accounts built. Prompt 1 below is the last 17.
+Run prompt 0b first — Mogo's two certificate accounts are not where the last export left them. Prompt 3 (the
+25-26 factors) is for a later session.
 
 ---
 
@@ -105,9 +107,18 @@ didn't take — stop and tell me.
 ======================= THE ACCOUNTS · 17 across 16 locations =======================
 
 ### Asphalt Prod - Mogo (154) — ref 154   [NSW]
-    Leave alone here: LGCS_4001127731, LGCS_4204072845, 50002617992_4204072845_CERTS
+    Leave alone here: LGCS_4001127731, LGCS_4204072845
+    50002617992_4204072845_CERTS is ALSO here, opened 7/1/2026, and holds no data. Do
+    not create it again. If prompt 0b showed it has no relationship, it is empty and
+    ready: skip step 3 for it and run steps 4–6 with src 50002617992_4204072845,
+    expecting Jun none · Jul 29,519 · Aug 28,511. If it already has a relationship to
+    that account, leave it. If its relationship points at 50002769514_4001127731 or
+    its Account Ref reads 4001127731, stop and show me — that is the 4 Sep account
+    renamed onto the wrong NMI.
  1. 50002769514_4001127731_CERTS · ref 4001127731 · src 50002769514_4001127731
     Expect Jun none · Jul 3,499 · Aug 3,499
+    (This one existed on 4 Sep and has since gone. Step 2's CERTS filter tells you
+    whether it is back; if it is there, stop and show me rather than remake it.)
 
 ### Asphalt Prod - Somerton (303) — ref L9.J.17032627   [VIC]
     Leave alone here: LGCS_6001311036
@@ -283,6 +294,32 @@ NEGATIVE — if a field won't take a minus, stop. Check for an existing 25-26 ro
 for the region first; skip and tell me if one exists. Never edit or delete an
 existing factor. Do NSW first, stop and show me, then the rest.
 ```
+
+---
+
+## 0b · Mogo — what is actually there (read-only)
+
+```
+On the Envizi tab. Read-only — create, edit, save or delete nothing.
+Find location "Asphalt Prod - Mogo (154)" (Location Ref 154), Quick links →
+Accounts, Show All Accounts, filter Account Number on "CERTS". List every row you
+see with its full account number, Account Ref, Supplier and Opened On.
+
+Then for each _CERTS row whose supplier is LGC Virtual Account: tick it, Actions →
+Virtual Account Setup, and tell me what the Virtual Account Relationships grid
+shows — 0 Row, or the source account, Effective From and Effective To. Screenshot
+the grid. Do not click Create New, Delete, Close or Move. Then open the account and
+read Review → Monthly Data for Jun, Jul and Aug 2026.
+
+I expect to see 50002617992_4204072845_CERTS (Account Ref 4204072845). Tell me
+whether 50002769514_4001127731_CERTS is there at all, and whether either account's
+Account Ref disagrees with the NMI in its own name.
+```
+
+Expected, if the 05 Sep extract is right: one row, `50002617992_4204072845_CERTS`, ref 4204072845, opened
+7/1/2026, **0 Row** on the relationships grid and no monthly data. That is the "created, not linked" state
+and prompt 1's Mogo card picks it up from there. The account I made on 4 Sep, `50002769514_4001127731_CERTS`,
+should be absent — it is in neither the 05 Sep extract nor the export taken after the first batches.
 
 ---
 

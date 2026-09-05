@@ -269,7 +269,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 <header class="masthead">
   <div class="top">
     <div>
-      <div class="eyebrow">Downer · Envizi · FY26–28 electricity renewals · built from the 03 Sep 2026 extracts</div>
+      <div class="eyebrow" id="eyebrow">Downer · Envizi · FY26–28 electricity renewals</div>
       <h1>Large Market Virtual Meters</h1>
       <p class="lede">The sites contracted under the FY26–28 renewal agreements are renewable from 1 July 2026. Envizi shows that through a <strong>Certificates - Location - kWh</strong> account set up as a <strong>virtual meter</strong> of the account carrying the site's electricity. Work the four sections in order; ticks and notes save in this browser.</p>
     </div>
@@ -392,7 +392,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
         <dt>Usage settings</dt><dd>The <span class="mono">LGCS_</span> accounts use Usage Type <em>Consolidation</em>, Use <em>CO2e and Base Measure</em>, Apportionment 0 &mdash; match if offered, else defaults.</dd>
       </dl>
       <p class="small muted"><b>Month chips:</b> <em>actual</em> = billed data loaded, <em>accrued</em> = Envizi's estimate while the bill is outstanding. Certificate accounts are <em>Event Data - No Accruals</em>, so they mirror whatever the source holds and follow it when a bill lands.</p>
-      <p class="small muted"><b>Sources:</b> the site register and rate schedules in <em>Downer_Energy_Contracting_and_Budget_Summary_FY26-28.xlsx</em>, the Jun&ndash;Aug 26 Envizi data, and <em>Extract_for_Accounts 03 Sep 26.csv</em> / <em>Extract_for_Locations 26 Aug 26.csv</em>. The companion workbook <em>Account_Setup_and_Data_Load_-_PM&amp;C_LMCERTSJUL26_Setup.xlsx</em> holds the same review with live formulas.</p>
+      <p class="small muted"><b>Sources:</b> the site register and rate schedules in <em>Downer_Energy_Contracting_and_Budget_Summary_FY26-28.xlsx</em>, the Jun&ndash;Aug 26 Envizi data, and <em>Extract_for_Accounts <span id="srcExtract"></span>.csv</em> / <em>Extract_for_Locations 26 Aug 26.csv</em>. The companion workbook <em>Account_Setup_and_Data_Load_-_PM&amp;C_LMCERTSJUL26_Setup.xlsx</em> holds the same review with live formulas.</p>
     </div>
   </details>
 </section>
@@ -433,7 +433,9 @@ const cardStatus=r=>{ const s=rowState(r); if(s.verified||LIVE.has(r.new_acct)) 
   const k=[[(DATA.dual||[]).length,"1 · accounts to close","var(--c4)"],[todo,"2 · virtual accounts still to make","var(--c1)"],[wait.length,"3 · temporary accounts, to remake later","var(--c3)"],[parked,"of those can skip the rework — allocate first","var(--c3)"],[live,"already built in Envizi","var(--good)"],[DATA.lgcs.length,"historical LGCS_ accounts to leave alone","var(--c2)"],[alinta+named,"already renewable, or excluded by name","var(--ink-3)"],["81","register rows reviewed","var(--ink-3)"]];
   document.querySelectorAll('[data-n]').forEach(el=>{ el.textContent={create:creates.length,noprior:noPrior,prior:withPrior,lgcs:DATA.lgcs.length,alinta,named,hist,small,live,todo,dual:(DATA.dual||[]).length,wait:wait.length,parked}[el.dataset.n] });
   $("#kpis").innerHTML=k.map(([v,l,c])=>`<div class="kpi" style="--kpi-color:${c}"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
-  $("#footBuilt").textContent=`Built ${DATA.built} from the ${DATA.extract_date} accounts extract, the 26 Aug 26 locations extract, and the Jun–Aug 26 Envizi export taken ${DATA.verify_date} after the first two accounts were made.`;
+  $("#footBuilt").textContent=`Built ${DATA.built} from the ${DATA.extract_date} accounts extract, the 26 Aug 26 locations extract, and the Jun–Aug 26 Envizi export taken ${DATA.verify_date}, after the first Claude in Chrome batches. Month figures on the cards come from that export; "built" comes from the extract.`;
+  $("#eyebrow").textContent=`Downer · Envizi · FY26–28 electricity renewals · built from the ${DATA.extract_date} accounts extract`;
+  const se=$("#srcExtract"); if(se) se.textContent=DATA.extract_date.replace(/ (\d{2})(\d{2})$/," $2");
 })();
 function sectionTicks(){
   const dual=DATA.dual||[], wait=DATA.waiting||[];
