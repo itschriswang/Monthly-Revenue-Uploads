@@ -4,9 +4,10 @@ What I paste into Claude in Chrome with Envizi (`au001.envizi.com`) open in the 
 run at least once against the real screens; the quirks noted inside them are real. Keep Envizi in front
 while it works — it only sees the active tab.
 
-Progress as of the 05 Sep 26 extract: **43 of 60** permanent accounts built. Prompt 1 below is the last 17.
-Run prompt 0b first — Mogo's two certificate accounts are not where the last export left them. Prompt 3 (the
-25-26 factors) is for a later session.
+Progress as of the 05 Sep 26 extract: **43 of 60** permanent accounts built. The order now is **0b → 2 → 1**:
+read Mogo, close the 14 old accounts, then build the last 17. Prompt 1 is written on the assumption that
+prompt 2 has already run, so the old Origin accounts are closed at 30 Jun 2026 but still listed. Prompt 3
+(the 25-26 factors) is for a later session.
 
 ---
 
@@ -23,11 +24,17 @@ the account is created first and saved empty, and only then linked. Never add
 data to it.
 
 THIS BATCH HAS DECOYS
-On 12 of these NMIs the OLD retailer's account is still open at the same location,
-with data, under the same NMI. It is NOT the source. The source is always the
-account I name — the 9000182xx Engie one, or the DEDI01 Shell one — never the
-50002xxx Origin one. I've marked every decoy below. Match the full account number
-character for character.
+On 12 of these NMIs the OLD retailer's Origin account sits at the same location
+under the same NMI. I closed it earlier today (Replaced On 6/30/2026), but a
+closed account is still listed and still holds data, so it still shows up in
+the account list and in the Source data tree. It is NOT the source. The source
+is always the account I name — the 9000182xx Engie one, or the DEDI01 Shell one
+— never the 50002xxx Origin one. I've marked every decoy below. Match the full
+account number character for character.
+
+While you're in the account list (step 2), glance at the decoy's Replaced On
+column. It should read 6/30/2026. If it's blank or reads any other date, the
+close-off didn't take — finish the account you're on, but tell me.
 
 MULTIPLE ACCOUNTS AT ONE LOCATION
 Largs Bay needs two. Find the location once, then repeat steps 3–6 for each.
@@ -102,7 +109,9 @@ Open the new account and confirm Opened On reads 7/1/2026 and there is exactly o
 relationship. Read the figures via Review → Monthly Data in the account nav — the
 Summary chart tooltips don't render. Confirm Jul and Aug 2026 kWh match the
 "Expect" line and there is NO June 2026 row. If June has a value, Effective From
-didn't take — stop and tell me.
+didn't take — stop and tell me. The "Expect" figures are the Engie or Shell
+account's own kWh; the closed Origin account's July and August (a different,
+usually larger number) should not appear anywhere in the new account.
 
 ======================= THE ACCOUNTS · 17 across 16 locations =======================
 
@@ -124,49 +133,49 @@ didn't take — stop and tell me.
     Leave alone here: LGCS_6001311036
  2. 900018217_6001311036_CERTS · ref 6001311036 · src 900018217_6001311036
     Expect Jun none · Jul 95,120 · Aug 95,120
-    ⚠ DECOY, do NOT pick: 50002646138_6001311036
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002646138_6001311036
 
 ### Utilities Derrimut Office — ref 7010   [VIC]
     Leave alone here: LGCS_6203753676
  3. 900018212_6203753676_CERTS · ref 6203753676 · src 900018212_6203753676
     Expect Jun none · Jul 25,947 · Aug 25,947
-    ⚠ DECOY, do NOT pick: 50002646140_6203753676
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002646140_6203753676
 
 ### Asphalt Prod - Shepparton (308) — ref 308   [VIC]
     Leave alone here: LGCS_VCCCSC0020
  4. 900018214_6204134328_CERTS · ref 6204134328 · src 900018214_6204134328
     Expect Jun none · Jul 51,998 · Aug 51,998
-    ⚠ DECOY, do NOT pick: 50002946681_6204134328
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002946681_6204134328
 
 ### Asphalt Prod - Bayswater (302) — ref 302   [VIC]
     Leave alone here: LGCS_6305920528
  5. 900018215_6305920528_CERTS · ref 6305920528 · src 900018215_6305920528
     Expect Jun none · Jul 77,307 · Aug 77,307
-    ⚠ DECOY, do NOT pick: 50002646141_6305920528
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002646141_6305920528
 
 ### Asphalt Prod - Traralgon (300) — ref 300   [VIC]
     Leave alone here: LGCS_6306009124
  6. 900018219_6306009124_CERTS · ref 6306009124 · src 900018219_6306009124
     Expect Jun none · Jul 29,711 · Aug 29,711
-    ⚠ DECOY, do NOT pick: 50002929573_6306009124
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002929573_6306009124
 
 ### Dandenong - PAV — ref 517   [VIC]
     Leave alone here: LGCS_6407100027
  7. 900018211_6407100027_CERTS · ref 6407100027 · src 900018211_6407100027
     Expect Jun none · Jul 9,177 · Aug 9,177
-    ⚠ DECOY, do NOT pick: 50002646142_6407100027
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002646142_6407100027
 
 ### Mulgrave - Wellington Rd, Clayton — ref 9118   [VIC]
     Leave alone here: LGCS_6407695655
  8. 900018210_6407695655_CERTS · ref 6407695655 · src 900018210_6407695655
     Expect Jun none · Jul 2,797 · Aug 2,797
-    ⚠ DECOY, do NOT pick: 50002646152_6407695655
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002646152_6407695655
 
 ### Asphalt Prod - Wodonga (315) — ref 315   [VIC]
     Leave alone here: LGCS_VBBB002698
  9. 900018213_VBBB002698_CERTS · ref VBBB002698 · src 900018213_VBBB002698
     Expect Jun none · Jul 33,474 · Aug 33,474
-    ⚠ DECOY, do NOT pick: 50002646143_VBBB002698
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002646143_VBBB002698
 
 ### Somerton Emulsion Plant — ref 8001   [VIC]
     Leave alone here: LGCS_VDDD001226
@@ -182,22 +191,22 @@ didn't take — stop and tell me.
     Leave alone here: LGCS_2001160742
 12. 900018206_2001160742_CERTS · ref 2001160742 · src 900018206_2001160742
     Expect Jun none · Jul 11,104 · Aug 11,104
-    ⚠ DECOY, do NOT pick: 50002618025_2001160742
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002618025_2001160742
 
 ### Asphalt Prod - Wingfield (523) — ref 523   [SA]
     Leave alone here: LGCS_2002254877
 13. 900018209_2002254877_CERTS · ref 2002254877 · src 900018209_2002254877
     Expect Jun none · Jul 118,252 · Aug 118,251
-    ⚠ DECOY, do NOT pick: 50002618027_2002254877
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002618027_2002254877
 
 ### Largs Bay — ref 163   [SA]   (2 accounts)
     Leave alone here: LGCS_SAAAAAB023, LGCS_SAAAAAC481
 14. 900018208_SAAAAAB023_CERTS · ref SAAAAAB023 · src 900018208_SAAAAAB023
     Expect Jun none · Jul 42,553 · Aug 42,553
-    ⚠ DECOY, do NOT pick: 50002656871_SAAAAAB023
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002656871_SAAAAAB023
 15. 900018207_SAAAAAC481_CERTS · ref SAAAAAC481 · src 900018207_SAAAAAC481
     Expect Jun none · Jul 12,365 · Aug 12,365
-    ⚠ DECOY, do NOT pick: 50002618029_SAAAAAC481
+    ⚠ DECOY, do NOT pick (closed 6/30/2026, still listed): 50002618029_SAAAAAC481
 
 ### Asphalt Prod - Hobart (329) — ref 17030565   [TAS]
 16. DEDI01_8000002117_8000002117_CERTS · ref 8000002117 · src DEDI01_8000002117_8000002117
